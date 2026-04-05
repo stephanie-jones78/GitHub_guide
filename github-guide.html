@@ -41,11 +41,11 @@ body{background:#0d1117;color:#e6edf3;font-family:'Courier New',Consolas,monospa
 .sb-stat span{color:var(--git);}
 
 /* ── LAYOUT ── */
-#layout{display:flex;min-height:100vh;}
-#main{flex:1;min-width:0;}
+#layout{display:flex;min-height:100vh;width:100%;}
+#main{flex:1;min-width:0;max-width:100%;overflow-x:hidden;}
 
 /* ── TABS ── */
-#tabs{position:sticky;top:0;z-index:100;background:var(--bg2);border-bottom:1px solid var(--border);display:flex;overflow-x:auto;scrollbar-width:none;}
+#tabs{position:sticky;top:0;z-index:100;background:var(--bg2);border-bottom:1px solid var(--border);display:flex;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;}
 #tabs::-webkit-scrollbar{display:none;}
 .tab{flex-shrink:0;padding:11px 18px;font-size:11px;letter-spacing:1px;color:var(--dim);cursor:pointer;border-bottom:2px solid transparent;border-right:1px solid var(--border);transition:all .15s;white-space:nowrap;display:flex;align-items:center;gap:7px;}
 .tab:hover{color:var(--txt);background:var(--bg4);}
@@ -54,7 +54,7 @@ body{background:#0d1117;color:#e6edf3;font-family:'Courier New',Consolas,monospa
 .tab.on .tab-dot{background:var(--git);}
 
 /* ── SECTIONS ── */
-.sec{padding:52px 44px;border-bottom:1px solid var(--border);background:var(--bg);max-width:720px;opacity:0;transform:translateY(10px);transition:opacity .5s,transform .5s;}
+.sec{padding:52px 44px;border-bottom:1px solid var(--border);background:var(--bg);max-width:720px;opacity:1;transform:none;transition:opacity .5s,transform .5s;}
 .sec.vis{opacity:1;transform:none;}
 @media(max-width:720px){.sec{padding:32px 20px;}}
 
@@ -207,6 +207,26 @@ pre{margin:0;line-height:1.75;}
 #mdis.show{opacity:1;}
 
 .foot-hint{text-align:center;padding:40px;font-size:10px;color:var(--border);letter-spacing:2px;cursor:pointer;}
+
+@media(max-width:720px){
+  body{font-size:14px;}
+  #layout{display:block;width:100%;}
+  #main{width:100%;display:block;}
+  #tabs{position:sticky;top:0;z-index:100;}
+  .sec{padding:28px 18px;max-width:100%;}
+  .concept-grid{grid-template-columns:1fr;}
+  .cblock{margin:16px 0;}
+  .cscroll{padding:14px 0;}
+  .lc{font-size:12px;}
+  .ln{width:32px;padding-right:10px;}
+  pre{font-size:12px;}
+  .wf-step{flex-direction:row;}
+  .branch-viz{padding:14px;}
+  .pages-steps{margin:16px 0;}
+  .ps-item{gap:12px;}
+  .ps-num{font-size:22px;}
+  .quiz-opt{font-size:12px;padding:9px 12px;}
+}
 </style>
 </head>
 <body>
@@ -401,20 +421,20 @@ pre{margin:0;line-height:1.75;}
 ══════════════════════════════════ -->
 <div class="sec" id="sec-setup">
   <div class="phase-wrap"><div class="phase-tag">// SECTION 03</div><div class="phase-line"></div></div>
-  <h2>One-time setup.<br><span class="hl">Do this tonight.</span></h2>
+  <h2>One-time setup.<br><span class="hl">Do this once. Never again.</span></h2>
 
-  <p>Everything in this section happens once. After this, your machine is configured and you never have to do it again.</p>
+  <p>Everything here runs once. After this your machine is permanently configured — every project you ever create benefits from this setup automatically.</p>
 
   <div class="workflow">
-    <div class="wf-head">// SETUP CHECKLIST — IN ORDER</div>
+    <div class="wf-head">// IN ORDER — DON'T SKIP STEPS</div>
 
     <div class="wf-step" onclick="toggleWf(this)">
       <div class="wf-num" style="color:var(--git)">01</div>
       <div class="wf-content">
-        <div class="wf-top"><div class="wf-title">Create a GitHub account</div><div class="wf-arr">›</div></div>
+        <div class="wf-top"><div class="wf-title">Create your GitHub account</div><div class="wf-arr">›</div></div>
         <div class="wf-body">
-          <p>Go to <code>github.com</code>. Choose a username you'd be comfortable showing an employer — your name, a clean handle, something professional. This is your public identity as a developer. You can't easily change it later without breaking links.</p>
-          <p>Use your real email. Verify it. That's it for the website for now.</p>
+          <p>Go to <code>github.com</code>. Your username becomes part of your public URL — <code>github.com/yourname</code> — so choose something professional. Your name, a clean handle. You can't easily change it later without breaking existing links.</p>
+          <p>Use your real email. Verify it. That's all you do on the website for now.</p>
           <div class="wf-cmd">→ github.com/signup</div>
         </div>
       </div>
@@ -425,9 +445,10 @@ pre{margin:0;line-height:1.75;}
       <div class="wf-content">
         <div class="wf-top"><div class="wf-title">Install Git on your machine</div><div class="wf-arr">›</div></div>
         <div class="wf-body">
-          <p>Git is a program that runs locally. On Mac, open Terminal and run:</p>
+          <p>Git is the local program that actually tracks your code. Open Terminal and check if it's already there:</p>
           <div class="wf-cmd">git --version</div>
-          <p style="margin-top:10px">If it's not installed, macOS will prompt you to install it automatically via Xcode Command Line Tools. Accept and wait. On Windows, download Git from <code>git-scm.com</code>. Run the installer with all defaults.</p>
+          <p style="margin-top:10px"><strong>Mac:</strong> If not installed, macOS will prompt you to install via Xcode Command Line Tools — accept and wait about 2 minutes.</p>
+          <p><strong>Windows:</strong> Download from <code>git-scm.com</code> and run the installer with all defaults.</p>
         </div>
       </div>
     </div>
@@ -435,9 +456,12 @@ pre{margin:0;line-height:1.75;}
     <div class="wf-step" onclick="toggleWf(this)">
       <div class="wf-num" style="color:var(--git)">03</div>
       <div class="wf-content">
-        <div class="wf-top"><div class="wf-title">Configure your identity</div><div class="wf-arr">›</div></div>
+        <div class="wf-top"><div class="wf-title">Tell Git who you are</div><div class="wf-arr">›</div></div>
         <div class="wf-body">
-          <p>Every commit you make is signed with your name and email. Run these two commands — use the same email as your GitHub account:</p>
+          <p>Every commit you make is permanently stamped with your name and email. This is how the record knows it was you. Use the same email as your GitHub account.</p>
+          <div class="wf-cmd">git config --global user.name "Your Name"</div>
+          <div class="wf-cmd" style="margin-top:6px">git config --global user.email "you@email.com"</div>
+          <div class="wf-cmd" style="margin-top:6px">git config --global init.defaultBranch main</div>
         </div>
       </div>
     </div>
@@ -445,11 +469,15 @@ pre{margin:0;line-height:1.75;}
     <div class="wf-step" onclick="toggleWf(this)">
       <div class="wf-num" style="color:var(--git)">04</div>
       <div class="wf-content">
-        <div class="wf-top"><div class="wf-title">Set up SSH authentication</div><div class="wf-arr">›</div></div>
+        <div class="wf-top"><div class="wf-title">Set up SSH — your secure handshake with GitHub</div><div class="wf-arr">›</div></div>
         <div class="wf-body">
-          <p>SSH lets you push to GitHub without typing your password every time. Generate a key pair — a private key that stays on your machine and a public key you give to GitHub.</p>
-          <p>After generating, copy your public key (<code>cat ~/.ssh/id_ed25519.pub</code>) and paste it into GitHub → Settings → SSH and GPG keys → New SSH key.</p>
-          <p>One-time setup. Never deal with passwords again.</p>
+          <p><strong>Why this exists:</strong> GitHub stopped accepting passwords from the terminal in 2021. Your account password will never work there — it's intentionally blocked. The terminal needs a different form of authentication: SSH keys.</p>
+          <p><strong>What SSH actually is:</strong> SSH creates two mathematically linked keys — a private key that stays on your machine and a public key you give to GitHub. When you push code, your machine proves its identity by solving a challenge that only the holder of the private key can solve. GitHub verifies it using the public key you registered. No password. No prompts. Just works.</p>
+          <p><strong>The two files you'll see:</strong></p>
+          <p>After generating, your <code>~/.ssh/</code> folder will have two files with the same name:</p>
+          <p><code>id_ed25519</code> — your <strong>private key</strong>. Never share this. Never copy this anywhere. It stays on your machine only.</p>
+          <p><code>id_ed25519.pub</code> — your <strong>public key</strong>. This is what you give to GitHub. Safe to share.</p>
+          <p><strong>What the outputs mean:</strong> When you generate the key, Terminal prints random art and a fingerprint starting with <code>SHA256:</code>. That's just a visual confirmation the key was created — it's not the key itself. The actual key is in the <code>.pub</code> file.</p>
         </div>
       </div>
     </div>
@@ -457,9 +485,17 @@ pre{margin:0;line-height:1.75;}
     <div class="wf-step" onclick="toggleWf(this)">
       <div class="wf-num" style="color:var(--git)">05</div>
       <div class="wf-content">
-        <div class="wf-top"><div class="wf-title">Set default branch name to main</div><div class="wf-arr">›</div></div>
+        <div class="wf-top"><div class="wf-title">Add your public key to GitHub</div><div class="wf-arr">›</div></div>
         <div class="wf-body">
-          <p>Git used to default to calling the primary branch <code>master</code>. GitHub now uses <code>main</code>. Make them match to avoid confusion:</p>
+          <p>This is the step that connects your machine to your account. You do it once.</p>
+          <p>Copy your public key to clipboard:</p>
+          <div class="wf-cmd">cat ~/.ssh/id_ed25519.pub | pbcopy</div>
+          <p style="margin-top:10px">Nothing visible happens — it's in your clipboard. Now on GitHub:</p>
+          <p>Profile photo → <strong>Settings</strong> → <strong>SSH and GPG keys</strong> → <strong>New SSH key</strong> → paste → <strong>Add SSH key</strong></p>
+          <p>The key you paste will be one long line starting with <code>ssh-ed25519</code> followed by a long string and ending with your email. If what you're pasting starts with <code>SHA256</code> — that's the fingerprint, not the key. Run <code>cat ~/.ssh/id_ed25519.pub</code> and copy that output instead.</p>
+          <p><strong>Verify it worked:</strong></p>
+          <div class="wf-cmd">ssh -T git@github.com</div>
+          <p style="margin-top:8px">You should see: <code>Hi username! You've successfully authenticated.</code> That's it. You're set.</p>
         </div>
       </div>
     </div>
@@ -468,30 +504,41 @@ pre{margin:0;line-height:1.75;}
   <div class="cblock">
     <div class="cblock-head">
       <div class="cdots"><span style="background:#FF5F57"></span><span style="background:#FEBC2E"></span><span style="background:#28C840"></span></div>
-      <div class="cfile">terminal — complete setup commands</div>
-      <button class="ccopy" onclick="cp(this,'# Step 3: Set your identity\ngit config --global user.name \"Your Name\"\ngit config --global user.email \"you@example.com\"\n\n# Step 4: Generate SSH key\nssh-keygen -t ed25519 -C \"you@example.com\"\n\n# Step 5: Set default branch name\ngit config --global init.defaultBranch main\n\n# Verify everything is set\ngit config --global --list')">copy</button>
+      <div class="cfile">terminal — full setup sequence</div>
+      <button class="ccopy" onclick="cp(this,'# Step 3: Tell Git who you are\ngit config --global user.name \"Your Name\"\ngit config --global user.email \"you@email.com\"\ngit config --global init.defaultBranch main\n\n# Step 4: Generate your SSH key pair\n# (Press Enter 3x to accept all defaults)\nssh-keygen -t ed25519 -C \"you@email.com\"\n\n# Step 5: Copy your PUBLIC key to clipboard\ncat ~/.ssh/id_ed25519.pub | pbcopy\n# → Paste this into GitHub: Settings → SSH keys → New SSH key\n\n# Verify GitHub can see your machine\nssh -T git@github.com\n# Should say: Hi username! You've successfully authenticated.\n\n# Verify your Git config\ngit config --global --list')">copy</button>
     </div>
     <div class="cscroll"><pre>
-<div class="cl"><span class="ln">1</span><span class="lc"><span class="cm"># Step 3: Set your identity</span></span></div>
+<div class="cl"><span class="ln">1</span><span class="lc"><span class="cm"># Step 3: Tell Git who you are</span></span></div>
 <div class="cl"><span class="ln">2</span><span class="lc"><span class="f">git</span> <span class="k">config</span> <span class="s">--global</span> <span class="w">user.name </span><span class="s">"Your Name"</span></span></div>
-<div class="cl"><span class="ln">3</span><span class="lc"><span class="f">git</span> <span class="k">config</span> <span class="s">--global</span> <span class="w">user.email </span><span class="s">"you@example.com"</span></span></div>
-<div class="cl"><span class="ln">4</span><span class="lc"></span></div>
-<div class="cl"><span class="ln">5</span><span class="lc"><span class="cm"># Step 4: Generate SSH key (press Enter 3 times for defaults)</span></span></div>
-<div class="cl"><span class="ln">6</span><span class="lc"><span class="f">ssh-keygen</span> <span class="s">-t</span> <span class="w">ed25519</span> <span class="s">-C</span> <span class="s">"you@example.com"</span></span></div>
-<div class="cl"><span class="ln">7</span><span class="lc"></span></div>
-<div class="cl"><span class="ln">8</span><span class="lc"><span class="cm"># Copy the public key to paste into GitHub</span></span></div>
-<div class="cl"><span class="ln">9</span><span class="lc"><span class="f">cat</span> <span class="w">~/.ssh/id_ed25519.pub</span></span></div>
-<div class="cl"><span class="ln">10</span><span class="lc"></span></div>
-<div class="cl"><span class="ln">11</span><span class="lc"><span class="cm"># Step 5: Default branch = main</span></span></div>
-<div class="cl"><span class="ln">12</span><span class="lc"><span class="f">git</span> <span class="k">config</span> <span class="s">--global</span> <span class="w">init.defaultBranch main</span></span></div>
-<div class="cl"><span class="ln">13</span><span class="lc"></span></div>
-<div class="cl"><span class="ln">14</span><span class="lc"><span class="cm"># Verify</span></span></div>
-<div class="cl"><span class="ln">15</span><span class="lc"><span class="f">git</span> <span class="k">config</span> <span class="s">--global</span> <span class="s">--list</span></span></div>
+<div class="cl"><span class="ln">3</span><span class="lc"><span class="f">git</span> <span class="k">config</span> <span class="s">--global</span> <span class="w">user.email </span><span class="s">"you@email.com"</span></span></div>
+<div class="cl"><span class="ln">4</span><span class="lc"><span class="f">git</span> <span class="k">config</span> <span class="s">--global</span> <span class="w">init.defaultBranch main</span></span></div>
+<div class="cl"><span class="ln">5</span><span class="lc"></span></div>
+<div class="cl"><span class="ln">6</span><span class="lc"><span class="cm"># Step 4: Generate SSH key pair (press Enter 3x for defaults)</span></span></div>
+<div class="cl"><span class="ln">7</span><span class="lc"><span class="f">ssh-keygen</span> <span class="s">-t</span> <span class="w">ed25519</span> <span class="s">-C</span> <span class="s">"you@email.com"</span></span></div>
+<div class="cl"><span class="ln">8</span><span class="lc"></span></div>
+<div class="cl"><span class="ln">9</span><span class="lc"><span class="cm"># Two files are created in ~/.ssh/</span></span></div>
+<div class="cl"><span class="ln">10</span><span class="lc"><span class="cm"># id_ed25519     ← PRIVATE. Never share this.</span></span></div>
+<div class="cl"><span class="ln">11</span><span class="lc"><span class="cm"># id_ed25519.pub ← PUBLIC. This goes to GitHub.</span></span></div>
+<div class="cl"><span class="ln">12</span><span class="lc"></span></div>
+<div class="cl"><span class="ln">13</span><span class="lc"><span class="cm"># Step 5: Copy public key to clipboard</span></span></div>
+<div class="cl"><span class="ln">14</span><span class="lc"><span class="f">cat</span> <span class="w">~/.ssh/id_ed25519.pub</span> <span class="k">|</span> <span class="f">pbcopy</span></span></div>
+<div class="cl"><span class="ln">15</span><span class="lc"><span class="cm"># → Go to GitHub → Settings → SSH keys → New SSH key → paste</span></span></div>
+<div class="cl"><span class="ln">16</span><span class="lc"></span></div>
+<div class="cl"><span class="ln">17</span><span class="lc"><span class="cm"># Verify the connection works</span></span></div>
+<div class="cl"><span class="ln">18</span><span class="lc"><span class="f">ssh</span> <span class="s">-T</span> <span class="w">git@github.com</span></span></div>
+<div class="cl"><span class="ln">19</span><span class="lc"><span class="cm"># → Hi username! You've successfully authenticated.</span></span></div>
+<div class="cl"><span class="ln">20</span><span class="lc"></span></div>
+<div class="cl"><span class="ln">21</span><span class="lc"><span class="cm"># Confirm your config</span></span></div>
+<div class="cl"><span class="ln">22</span><span class="lc"><span class="f">git</span> <span class="k">config</span> <span class="s">--global</span> <span class="s">--list</span></span></div>
     </pre></div>
   </div>
 
+  <div class="callout yellow">
+    <p><strong>Passwords vs SSH vs Tokens — the one thing to know:</strong> GitHub accounts use passwords to log into the website. But the terminal uses SSH keys. These are separate systems intentionally — the terminal has its own authentication so that even if someone learns your account password, they still can't push code from a machine that doesn't have your key.</p>
+  </div>
+
   <div class="callout blue">
-    <p><strong>You only do this once.</strong> From now on your machine knows who you are and can talk to GitHub securely. Every project you ever create will use this configuration automatically.</p>
+    <p><strong>If you're on Windows</strong> or <code>pbcopy</code> doesn't work, use this instead to print the key, then manually select and copy it:<br><code>cat ~/.ssh/id_ed25519.pub</code><br>Copy the entire line — from <code>ssh-ed25519</code> to the end of your email. That's your public key.</p>
   </div>
 </div>
 
@@ -926,8 +973,7 @@ const obs=new IntersectionObserver(entries=>{
 },{threshold:.25,rootMargin:'-56px 0px 0px 0px'});
 SECS.forEach(id=>{const el=document.getElementById(id);if(el)obs.observe(el);});
 
-const fadeObs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis');});},{threshold:.07});
-document.querySelectorAll('.sec').forEach(s=>fadeObs.observe(s));
+// sections visible by default for mobile compatibility
 
 function updateProgress(){
   // count all checked items
