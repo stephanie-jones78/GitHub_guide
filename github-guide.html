@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>git push origin main — GitHub Starter Guide</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html{scroll-behavior:smooth;background:#0d1117;color-scheme:dark;}
+body{background:#0d1117;color:#e6edf3;font-family:'Courier New',Consolas,monospace;font-size:15px;line-height:1.85;}
+:root{
+  --bg:#0d1117;--bg2:#161b22;--bg3:#1c2128;--bg4:#21262d;
+  --border:#30363d;--border2:#21262d;
+  --txt:#d1d9e0;--dim:#8b949e;--bright:#ffffff;
+  --kw:#ff7b72;--fn:#d2a8ff;--str:#a5d6ff;--cmt:#8b949e;--prop:#7ee787;
+  --g:#00FFB2;--r:#FF4D6D;--p:#A78BFA;--b:#38BDF8;--y:#FBBF24;
+  --git:#f0883e;
+}
+
+/* ── SIDEBAR ── */
+#sb{width:230px;flex-shrink:0;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow-y:auto;}
+@media(max-width:720px){#sb{display:none;}}
+.sb-top{padding:16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;}
+.sb-logo{font-size:20px;}
+.sb-title{font-size:11px;letter-spacing:3px;color:var(--dim);line-height:1.4;}
+.sb-title strong{color:var(--git);display:block;font-size:13px;letter-spacing:1px;}
+.sb-progress{padding:14px 16px;border-bottom:1px solid var(--border);}
+.sp-label{font-size:9px;letter-spacing:3px;color:var(--dim);margin-bottom:8px;}
+.sp-bar{height:4px;background:var(--border);border-radius:2px;overflow:hidden;}
+.sp-fill{height:100%;background:var(--g);width:0%;transition:width .5s ease;border-radius:2px;}
+.sp-count{font-size:9px;color:var(--dim);margin-top:5px;letter-spacing:1px;}
+.sb-nav{padding:8px 0;flex:1;overflow-y:auto;}
+.nav-section{font-size:9px;letter-spacing:2px;color:var(--dim);opacity:.45;padding:12px 16px 4px;}
+.nav-item{display:flex;align-items:center;gap:8px;padding:7px 16px;font-size:12px;color:var(--dim);cursor:pointer;border-left:2px solid transparent;transition:all .15s;white-space:nowrap;}
+.nav-item:hover{background:var(--bg4);color:var(--txt);}
+.nav-item.active{color:var(--git);border-left-color:var(--git);background:rgba(240,136,62,.05);}
+.nav-item .nav-check{width:14px;height:14px;border-radius:50%;border:1px solid var(--border);flex-shrink:0;transition:all .2s;display:flex;align-items:center;justify-content:center;font-size:8px;}
+.nav-item.done .nav-check{background:var(--g);border-color:var(--g);color:#000;}
+.sb-bottom{padding:14px;border-top:1px solid var(--border);}
+.sb-stat{font-size:10px;color:var(--dim);margin-bottom:4px;display:flex;justify-content:space-between;}
+.sb-stat span{color:var(--git);}
+
+/* ── LAYOUT ── */
+#layout{display:flex;min-height:100vh;}
+#main{flex:1;min-width:0;}
+
+/* ── TABS ── */
+#tabs{position:sticky;top:0;z-index:100;background:var(--bg2);border-bottom:1px solid var(--border);display:flex;overflow-x:auto;scrollbar-width:none;}
+#tabs::-webkit-scrollbar{display:none;}
+.tab{flex-shrink:0;padding:11px 18px;font-size:11px;letter-spacing:1px;color:var(--dim);cursor:pointer;border-bottom:2px solid transparent;border-right:1px solid var(--border);transition:all .15s;white-space:nowrap;display:flex;align-items:center;gap:7px;}
+.tab:hover{color:var(--txt);background:var(--bg4);}
+.tab.on{color:var(--bright);border-bottom-color:var(--git);background:var(--bg);}
+.tab-dot{width:6px;height:6px;border-radius:50%;background:var(--border);}
+.tab.on .tab-dot{background:var(--git);}
+
+/* ── SECTIONS ── */
+.sec{padding:52px 44px;border-bottom:1px solid var(--border);background:var(--bg);max-width:720px;opacity:0;transform:translateY(10px);transition:opacity .5s,transform .5s;}
+.sec.vis{opacity:1;transform:none;}
+@media(max-width:720px){.sec{padding:32px 20px;}}
+
+/* ── PHASE MARKER ── */
+.phase-wrap{display:flex;align-items:center;gap:14px;margin-bottom:28px;}
+.phase-tag{font-size:9px;letter-spacing:4px;color:var(--git);white-space:nowrap;}
+.phase-line{flex:1;height:1px;background:var(--border);}
+
+/* ── TYPE ── */
+h2{font-family:Georgia,'Times New Roman',serif;font-size:clamp(24px,4.5vw,38px);font-weight:700;font-style:italic;color:var(--bright);line-height:1.15;letter-spacing:-.5px;margin-bottom:20px;}
+h2 .hl{color:var(--git);}
+h3{font-size:15px;font-weight:700;color:var(--bright);margin:28px 0 12px;letter-spacing:.3px;}
+p{font-size:15px;color:var(--txt);line-height:1.9;margin-bottom:18px;}
+p strong{color:var(--bright);}
+p:last-child{margin-bottom:0;}
+code{background:var(--bg3);border:1px solid var(--border);color:var(--prop);padding:2px 7px;border-radius:4px;font-size:13px;font-family:'Courier New',monospace;white-space:nowrap;}
+
+/* ── CALLOUT ── */
+.callout{background:var(--bg2);border-left:3px solid var(--git);border-radius:0 6px 6px 0;padding:16px 20px;margin:22px 0;}
+.callout p{font-size:14px;color:var(--txt);margin:0;line-height:1.8;}
+.callout strong{color:var(--git);}
+.callout.blue{border-color:var(--b);}
+.callout.blue strong{color:var(--b);}
+.callout.yellow{border-color:var(--y);}
+.callout.yellow strong{color:var(--y);}
+.callout.red{border-color:var(--r);}
+.callout.red strong{color:var(--r);}
+
+/* ── CODE BLOCK ── */
+.cblock{background:var(--bg2);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin:22px 0;font-size:13px;}
+.cblock-head{padding:10px 16px;background:var(--bg3);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.cdots{display:flex;gap:6px;}
+.cdots span{width:10px;height:10px;border-radius:50%;}
+.cfile{font-size:11px;color:var(--dim);letter-spacing:1px;}
+.ccopy{font-size:10px;color:var(--dim);background:transparent;border:1px solid var(--border);padding:3px 10px;border-radius:3px;cursor:pointer;font-family:'Courier New',monospace;transition:all .15s;}
+.ccopy:hover{color:var(--g);border-color:var(--g);}
+.ccopy.done{color:var(--g);border-color:var(--g);}
+.cscroll{padding:18px 0;overflow-x:auto;}
+pre{margin:0;line-height:1.75;}
+.cl{display:flex;}
+.ln{width:44px;text-align:right;padding-right:16px;color:#3d444d;font-size:12px;user-select:none;flex-shrink:0;}
+.lc{font-size:13px;padding-right:20px;}
+.k{color:var(--kw);}.f{color:var(--fn);}.s{color:var(--str);}.cm{color:var(--cmt);}.pr{color:var(--prop);}.w{color:var(--txt);}.gt{color:var(--git);}
+
+/* ── CONCEPT CARDS ── */
+.concept-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:22px 0;}
+@media(max-width:500px){.concept-grid{grid-template-columns:1fr;}}
+.concept-card{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:18px;cursor:pointer;transition:all .2s;user-select:none;}
+.concept-card:hover{border-color:#444d56;}
+.concept-card.open{border-color:var(--git);background:rgba(240,136,62,.04);}
+.cc-icon{font-size:20px;margin-bottom:8px;}
+.cc-label{font-size:9px;letter-spacing:2px;color:var(--dim);margin-bottom:4px;transition:color .2s;}
+.concept-card.open .cc-label{color:var(--git);}
+.cc-title{font-size:14px;font-weight:700;color:var(--bright);}
+.cc-body{font-size:13px;color:var(--txt);line-height:1.75;max-height:0;overflow:hidden;transition:max-height .4s ease,margin .3s;}
+.concept-card.open .cc-body{max-height:220px;margin-top:10px;}
+.cc-hint{font-size:9px;color:var(--border);margin-top:8px;letter-spacing:1px;}
+.concept-card.open .cc-hint{display:none;}
+
+/* ── STEP CHECKLIST ── */
+.checklist{margin:22px 0;}
+.check-item{display:flex;gap:14px;align-items:flex-start;padding:14px 0;border-bottom:1px solid var(--border2);cursor:pointer;user-select:none;transition:opacity .2s;}
+.check-item:last-child{border-bottom:none;}
+.check-item.done-item{opacity:.6;}
+.check-box{width:22px;height:22px;border-radius:4px;border:1px solid var(--border);flex-shrink:0;margin-top:2px;display:flex;align-items:center;justify-content:center;font-size:11px;transition:all .2s;color:transparent;}
+.check-item.done-item .check-box{background:var(--g);border-color:var(--g);color:#000;}
+.check-content{flex:1;}
+.check-title{font-size:14px;font-weight:700;color:var(--bright);margin-bottom:4px;}
+.check-item.done-item .check-title{text-decoration:line-through;color:var(--dim);}
+.check-desc{font-size:13px;color:var(--txt);line-height:1.7;}
+.check-desc code{font-size:11px;}
+
+/* ── WORKFLOW DIAGRAM ── */
+.workflow{background:var(--bg2);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin:22px 0;}
+.wf-head{padding:12px 18px;background:var(--bg3);border-bottom:1px solid var(--border);font-size:10px;letter-spacing:3px;color:var(--dim);}
+.wf-step{display:flex;align-items:stretch;border-bottom:1px solid var(--border2);cursor:pointer;transition:background .15s;}
+.wf-step:last-child{border-bottom:none;}
+.wf-step:hover{background:var(--bg4);}
+.wf-step.open{background:var(--bg3);}
+.wf-num{width:48px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;border-right:1px solid var(--border2);}
+.wf-content{flex:1;padding:14px 18px;}
+.wf-top{display:flex;align-items:center;justify-content:space-between;}
+.wf-title{font-size:14px;font-weight:700;color:var(--bright);}
+.wf-arr{font-size:13px;color:var(--dim);transition:transform .25s;}
+.wf-step.open .wf-arr{transform:rotate(90deg);color:var(--git);}
+.wf-body{font-size:13px;color:var(--txt);line-height:1.75;max-height:0;overflow:hidden;transition:max-height .4s ease,margin .3s;}
+.wf-step.open .wf-body{max-height:200px;margin-top:10px;}
+.wf-body code{font-size:11px;}
+.wf-cmd{display:inline-block;background:var(--bg);border:1px solid var(--git);color:var(--git);padding:2px 10px;border-radius:4px;font-size:12px;margin-top:6px;font-family:'Courier New',monospace;}
+
+/* ── ANALOGY BOX ── */
+.analogy{background:rgba(0,255,178,.05);border:1px solid rgba(0,255,178,.2);border-radius:8px;padding:16px 20px;margin:22px 0;}
+.analogy-label{font-size:9px;letter-spacing:3px;color:var(--g);margin-bottom:8px;}
+.analogy p{font-size:13px;color:var(--txt);line-height:1.8;margin:0;font-style:italic;}
+.analogy strong{color:var(--bright);font-style:normal;}
+
+/* ── BRANCH VIZ ── */
+.branch-viz{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:20px;margin:22px 0;overflow-x:auto;}
+.bv-label{font-size:9px;letter-spacing:3px;color:var(--dim);margin-bottom:16px;}
+.bv-track{position:relative;padding:0 0 0 8px;}
+.bv-line{position:absolute;left:15px;top:0;bottom:0;width:2px;background:var(--border);}
+.bv-commit{display:flex;align-items:flex-start;gap:14px;margin-bottom:16px;position:relative;z-index:1;}
+.bv-commit:last-child{margin-bottom:0;}
+.bv-dot{width:14px;height:14px;border-radius:50%;flex-shrink:0;margin-top:3px;border:2px solid;position:relative;z-index:2;}
+.bv-info{flex:1;}
+.bv-hash{font-size:10px;color:var(--git);font-family:'Courier New',monospace;margin-bottom:2px;}
+.bv-msg{font-size:13px;color:var(--bright);margin-bottom:2px;}
+.bv-meta{font-size:10px;color:var(--dim);}
+.bv-branch-tag{display:inline-block;font-size:9px;letter-spacing:1px;padding:2px 7px;border-radius:10px;border:1px solid;margin-left:8px;vertical-align:middle;}
+
+/* ── QUIZ ── */
+.quiz-box{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:22px;margin:22px 0;}
+.quiz-q{font-size:14px;font-weight:700;color:var(--bright);margin-bottom:14px;}
+.quiz-opts{display:flex;flex-direction:column;gap:8px;}
+.quiz-opt{padding:10px 14px;background:var(--bg3);border:1px solid var(--border);border-radius:6px;cursor:pointer;font-size:13px;color:var(--txt);transition:all .2s;font-family:'Courier New',monospace;}
+.quiz-opt:hover{border-color:#444d56;color:var(--bright);}
+.quiz-opt.correct{border-color:var(--g);background:rgba(0,255,178,.1);color:var(--g);}
+.quiz-opt.wrong{border-color:var(--r);background:rgba(255,77,109,.08);color:var(--r);}
+.quiz-feedback{font-size:13px;margin-top:12px;padding:10px 14px;border-radius:6px;display:none;line-height:1.7;}
+.quiz-feedback.show{display:block;}
+.quiz-feedback.correct{background:rgba(0,255,178,.08);border:1px solid rgba(0,255,178,.3);color:var(--g);}
+.quiz-feedback.wrong{background:rgba(255,77,109,.07);border:1px solid rgba(255,77,109,.3);color:var(--r);}
+
+/* ── PAGES STEPS ── */
+.pages-steps{counter-reset:pages;margin:22px 0;}
+.ps-item{display:flex;gap:16px;margin-bottom:18px;padding-bottom:18px;border-bottom:1px solid var(--border2);}
+.ps-item:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0;}
+.ps-num{font-family:Georgia,serif;font-size:28px;font-style:italic;font-weight:700;color:var(--git);line-height:1;flex-shrink:0;width:28px;}
+.ps-content{}
+.ps-title{font-size:14px;font-weight:700;color:var(--bright);margin-bottom:5px;}
+.ps-body{font-size:13px;color:var(--txt);line-height:1.75;}
+.ps-body code{font-size:11px;}
+
+/* ── TOAST ── */
+#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(8px);background:var(--bg2);border:1px solid var(--g);color:var(--g);padding:10px 22px;font-size:11px;letter-spacing:2px;border-radius:4px;z-index:400;opacity:0;transition:all .3s;pointer-events:none;white-space:nowrap;}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+/* ── MODAL ── */
+#modal{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.88);display:none;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(4px);}
+#modal.open{display:flex;}
+#mbox{background:var(--bg2);border:1px solid var(--border);border-radius:10px;max-width:440px;width:100%;overflow:hidden;box-shadow:0 24px 60px rgba(0,0,0,.7);}
+#mhead{padding:14px 20px;background:var(--bg3);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+#mtitle{font-size:13px;font-weight:700;color:var(--git);}
+#mclose{background:none;border:none;color:var(--dim);font-size:18px;cursor:pointer;font-family:'Courier New',monospace;}
+#mbody{padding:22px 20px;}
+.mline{font-size:13px;color:var(--dim);line-height:1.8;margin-bottom:7px;opacity:0;transform:translateY(4px);transition:opacity .3s,transform .3s;}
+.mline.vis{opacity:1;transform:none;}
+.mline.last{color:var(--git);}
+#mdis{padding:0 20px 18px;font-size:10px;color:var(--muted);letter-spacing:2px;opacity:0;transition:opacity .4s;}
+#mdis.show{opacity:1;}
+
+.foot-hint{text-align:center;padding:40px;font-size:10px;color:var(--border);letter-spacing:2px;cursor:pointer;}
+</style>
+</head>
+<body>
+
+<div id="toast"></div>
+<div id="modal" onclick="closeModal()">
+  <div id="mbox" onclick="event.stopPropagation()">
+    <div id="mhead"><div id="mtitle"></div><button id="mclose" onclick="closeModal()">✕</button></div>
+    <div id="mbody"></div>
+    <div id="mdis">[tap anywhere to close]</div>
+  </div>
+</div>
+
+<div id="layout">
+
+<!-- ── SIDEBAR ── -->
+<div id="sb">
+  <div class="sb-top">
+    <div class="sb-logo">⬡</div>
+    <div class="sb-title"><strong>git push origin main</strong>GitHub from Zero</div>
+  </div>
+  <div class="sb-progress">
+    <div class="sp-label">YOUR PROGRESS</div>
+    <div class="sp-bar"><div class="sp-fill" id="progress-fill"></div></div>
+    <div class="sp-count" id="progress-count">0 of 7 sections complete</div>
+  </div>
+  <div class="sb-nav">
+    <div class="nav-section">SECTIONS</div>
+    <div class="nav-item active" onclick="jump('sec-mental')"><div class="nav-check" id="nc-0"></div>The Mental Model</div>
+    <div class="nav-item" onclick="jump('sec-concepts')"><div class="nav-check" id="nc-1"></div>Core Concepts</div>
+    <div class="nav-item" onclick="jump('sec-setup')"><div class="nav-check" id="nc-2"></div>Setup</div>
+    <div class="nav-item" onclick="jump('sec-workflow')"><div class="nav-check" id="nc-3"></div>The Daily Workflow</div>
+    <div class="nav-item" onclick="jump('sec-branches')"><div class="nav-check" id="nc-4"></div>Branches</div>
+    <div class="nav-item" onclick="jump('sec-pages')"><div class="nav-check" id="nc-5"></div>Publish Live</div>
+    <div class="nav-item" onclick="jump('sec-habits')"><div class="nav-check" id="nc-6"></div>Build in Public</div>
+  </div>
+  <div class="sb-bottom">
+    <div class="sb-stat">Commits to make today <span>1</span></div>
+    <div class="sb-stat">Days to first live site <span>1</span></div>
+    <div class="sb-stat">Excuses left <span>0</span></div>
+  </div>
+</div>
+
+<!-- ── MAIN ── -->
+<div id="main">
+<div id="tabs">
+  <div class="tab on" onclick="jump('sec-mental')"><div class="tab-dot"></div>mental_model</div>
+  <div class="tab" onclick="jump('sec-concepts')"><div class="tab-dot"></div>concepts</div>
+  <div class="tab" onclick="jump('sec-setup')"><div class="tab-dot"></div>setup</div>
+  <div class="tab" onclick="jump('sec-workflow')"><div class="tab-dot"></div>workflow</div>
+  <div class="tab" onclick="jump('sec-branches')"><div class="tab-dot"></div>branches</div>
+  <div class="tab" onclick="jump('sec-pages')"><div class="tab-dot"></div>publish</div>
+  <div class="tab" onclick="jump('sec-habits')"><div class="tab-dot"></div>build_in_public</div>
+</div>
+
+<!-- ══════════════════════════════════
+     SECTION 1 — MENTAL MODEL
+══════════════════════════════════ -->
+<div class="sec" id="sec-mental">
+  <div class="phase-wrap"><div class="phase-tag">// SECTION 01</div><div class="phase-line"></div></div>
+  <h2>Before you touch<br><span class="hl">a single command.</span></h2>
+
+  <p>Most people learn GitHub backwards. They start with commands before they understand what the commands are <em>doing</em>. Then they get confused, something breaks, and they quit. We're not doing that.</p>
+
+  <p>This section is the only one with no commands. Just the mental model. Get this right and everything else makes sense automatically.</p>
+
+  <h3>What GitHub actually is</h3>
+  <p>GitHub is two separate things that people constantly conflate:</p>
+
+  <div class="concept-grid">
+    <div class="concept-card" onclick="this.classList.toggle('open')">
+      <div class="cc-icon">⬡</div>
+      <div class="cc-label">FIRST THING</div>
+      <div class="cc-title">Git — the version control system</div>
+      <div class="cc-body">Git runs on <em>your computer</em>. It's software that tracks every change you make to your code over time. Every save is recorded. You can rewind to any point in history. Think of it as an infinitely detailed undo history — except it's permanent, searchable, and can handle hundreds of thousands of files.</div>
+      <div class="cc-hint">↓ tap to expand</div>
+    </div>
+    <div class="concept-card" onclick="this.classList.toggle('open')">
+      <div class="cc-icon">☁</div>
+      <div class="cc-label">SECOND THING</div>
+      <div class="cc-title">GitHub — the cloud storage and portfolio</div>
+      <div class="cc-body">GitHub is a website where you store copies of your Git history in the cloud. It's where other people can see your code, where you back it up, and where you deploy live websites from. Git is the tool. GitHub is the destination. They're related but distinct.</div>
+      <div class="cc-hint">↓ tap to expand</div>
+    </div>
+  </div>
+
+  <div class="analogy">
+    <div class="analogy-label">// THE ANALOGY</div>
+    <p>Every game you play has a save file that records your exact state — your roster, your stats, your progress. <strong>Git is the save system.</strong> It runs locally on your machine and records every meaningful change. <strong>GitHub is the cloud backup</strong> — like syncing that save to the cloud so it can't be lost, so your teammates can load it, and so anyone who wants to see your career stats can look them up.</p>
+  </div>
+
+  <h3>Why every serious developer uses it</h3>
+  <p>Three reasons that matter for where you are right now:</p>
+
+  <div class="checklist" id="cl-why">
+    <div class="check-item" onclick="toggleCheck(this)">
+      <div class="check-box">✓</div>
+      <div class="check-content">
+        <div class="check-title">You can never permanently break anything</div>
+        <div class="check-desc">Every version of your code is saved. If you write something that destroys everything, you revert to yesterday's version in one command. No more "I accidentally deleted it all" stories.</div>
+      </div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this)">
+      <div class="check-box">✓</div>
+      <div class="check-content">
+        <div class="check-title">Your work becomes a public proof of skill</div>
+        <div class="check-desc">A GitHub profile with real projects on it is worth more than any certificate. When you cold-email a professor, apply to a program, or pitch an idea — your GitHub is what people check. Claims are cheap. Code is real.</div>
+      </div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this)">
+      <div class="check-box">✓</div>
+      <div class="check-content">
+        <div class="check-title">It's how 100 million developers actually work</div>
+        <div class="check-desc">Google, NASA, every open source project you've ever used — all of it lives on GitHub. Learning this now means you speak the same language as every professional developer on the planet.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout yellow">
+    <p><strong>One thing to internalize:</strong> GitHub isn't a feature you add when you're "ready." It's the first thing you set up. Even a project with one file deserves a repo. The habit of committing is more valuable than any individual project.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     SECTION 2 — CORE CONCEPTS
+══════════════════════════════════ -->
+<div class="sec" id="sec-concepts">
+  <div class="phase-wrap"><div class="phase-tag">// SECTION 02</div><div class="phase-line"></div></div>
+  <h2>Six concepts.<br><span class="hl">Tap each one.</span></h2>
+
+  <p>Every GitHub command you'll ever run maps back to one of these six ideas. Understand these and you'll be able to figure out unfamiliar commands on your own. Skip these and you'll copy-paste forever without knowing what anything does.</p>
+
+  <div class="concept-grid">
+    <div class="concept-card" onclick="this.classList.toggle('open')">
+      <div class="cc-icon">📁</div>
+      <div class="cc-label">CONCEPT 01</div>
+      <div class="cc-title">Repository (repo)</div>
+      <div class="cc-body">A repository is a project folder that Git is tracking. It contains all your code files plus a hidden folder called <code>.git</code> that stores the entire history of every change ever made. One project = one repo. You'll have many repos over time — one per project.</div>
+      <div class="cc-hint">↓ tap to expand</div>
+    </div>
+    <div class="concept-card" onclick="this.classList.toggle('open')">
+      <div class="cc-icon">📸</div>
+      <div class="cc-label">CONCEPT 02</div>
+      <div class="cc-title">Commit</div>
+      <div class="cc-body">A commit is a saved snapshot of your code at a specific point in time. Every commit has a unique ID (a hash like <code>a3f9c2d</code>), a message you write describing what changed, and a timestamp. Think of commits as the individual frames in a film — your project's complete history, frame by frame. Commit often. Each commit should represent one logical change.</div>
+      <div class="cc-hint">↓ tap to expand</div>
+    </div>
+    <div class="concept-card" onclick="this.classList.toggle('open')">
+      <div class="cc-icon">🎭</div>
+      <div class="cc-label">CONCEPT 03</div>
+      <div class="cc-title">Staging area</div>
+      <div class="cc-body">Before you commit, you choose exactly which changes to include. That selection process is called staging. You use <code>git add</code> to move changes into the staging area, then <code>git commit</code> to lock them in. This lets you make many edits but commit them in logical, organized groups rather than all at once.</div>
+      <div class="cc-hint">↓ tap to expand</div>
+    </div>
+    <div class="concept-card" onclick="this.classList.toggle('open')">
+      <div class="cc-icon">🌿</div>
+      <div class="cc-label">CONCEPT 04</div>
+      <div class="cc-title">Branch</div>
+      <div class="cc-body">A branch is a separate, parallel copy of your code where you can experiment freely without affecting your main working version. Your primary branch is called <code>main</code>. When you want to try a new feature, you create a branch, build it there, then merge it back when it's ready. Branches are free to create and instantly disposable.</div>
+      <div class="cc-hint">↓ tap to expand</div>
+    </div>
+    <div class="concept-card" onclick="this.classList.toggle('open')">
+      <div class="cc-icon">⬆</div>
+      <div class="cc-label">CONCEPT 05</div>
+      <div class="cc-title">Push and Pull</div>
+      <div class="cc-body"><strong>Push</strong> sends your local commits up to GitHub. <strong>Pull</strong> brings changes from GitHub down to your machine. These are the two directions of sync. When you work alone: push when you're done for the day. When working with others: pull before you start to get their latest changes, push when you're done to share yours.</div>
+      <div class="cc-hint">↓ tap to expand</div>
+    </div>
+    <div class="concept-card" onclick="this.classList.toggle('open')">
+      <div class="cc-icon">🔀</div>
+      <div class="cc-label">CONCEPT 06</div>
+      <div class="cc-title">Merge and Pull Request</div>
+      <div class="cc-body">Merging combines two branches back into one. A <strong>pull request (PR)</strong> is a formal proposal to merge — it shows exactly what changed, lets people review and comment, and creates a clear record of why changes were made. PRs are standard in professional development and become your portfolio of decision-making, not just code output.</div>
+      <div class="cc-hint">↓ tap to expand</div>
+    </div>
+  </div>
+
+  <h3>Knowledge check</h3>
+  <div id="quiz1" class="quiz-box">
+    <div class="quiz-q">You've been working on a new feature all afternoon. Your main branch is clean and working. Where should you be building?</div>
+    <div class="quiz-opts">
+      <div class="quiz-opt" onclick="answer(this,'wrong','quiz1')">Directly on <code>main</code> — it's my project, nobody else is using it</div>
+      <div class="quiz-opt" onclick="answer(this,'correct','quiz1')">On a new branch — then merge it back when it's done and tested</div>
+      <div class="quiz-opt" onclick="answer(this,'wrong','quiz1')">A completely separate repo — less risk of breaking things</div>
+    </div>
+    <div class="quiz-feedback" id="quiz1-fb"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     SECTION 3 — SETUP
+══════════════════════════════════ -->
+<div class="sec" id="sec-setup">
+  <div class="phase-wrap"><div class="phase-tag">// SECTION 03</div><div class="phase-line"></div></div>
+  <h2>One-time setup.<br><span class="hl">Do this tonight.</span></h2>
+
+  <p>Everything in this section happens once. After this, your machine is configured and you never have to do it again.</p>
+
+  <div class="workflow">
+    <div class="wf-head">// SETUP CHECKLIST — IN ORDER</div>
+
+    <div class="wf-step" onclick="toggleWf(this)">
+      <div class="wf-num" style="color:var(--git)">01</div>
+      <div class="wf-content">
+        <div class="wf-top"><div class="wf-title">Create a GitHub account</div><div class="wf-arr">›</div></div>
+        <div class="wf-body">
+          <p>Go to <code>github.com</code>. Choose a username you'd be comfortable showing an employer — your name, a clean handle, something professional. This is your public identity as a developer. You can't easily change it later without breaking links.</p>
+          <p>Use your real email. Verify it. That's it for the website for now.</p>
+          <div class="wf-cmd">→ github.com/signup</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="wf-step" onclick="toggleWf(this)">
+      <div class="wf-num" style="color:var(--git)">02</div>
+      <div class="wf-content">
+        <div class="wf-top"><div class="wf-title">Install Git on your machine</div><div class="wf-arr">›</div></div>
+        <div class="wf-body">
+          <p>Git is a program that runs locally. On Mac, open Terminal and run:</p>
+          <div class="wf-cmd">git --version</div>
+          <p style="margin-top:10px">If it's not installed, macOS will prompt you to install it automatically via Xcode Command Line Tools. Accept and wait. On Windows, download Git from <code>git-scm.com</code>. Run the installer with all defaults.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="wf-step" onclick="toggleWf(this)">
+      <div class="wf-num" style="color:var(--git)">03</div>
+      <div class="wf-content">
+        <div class="wf-top"><div class="wf-title">Configure your identity</div><div class="wf-arr">›</div></div>
+        <div class="wf-body">
+          <p>Every commit you make is signed with your name and email. Run these two commands — use the same email as your GitHub account:</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="wf-step" onclick="toggleWf(this)">
+      <div class="wf-num" style="color:var(--git)">04</div>
+      <div class="wf-content">
+        <div class="wf-top"><div class="wf-title">Set up SSH authentication</div><div class="wf-arr">›</div></div>
+        <div class="wf-body">
+          <p>SSH lets you push to GitHub without typing your password every time. Generate a key pair — a private key that stays on your machine and a public key you give to GitHub.</p>
+          <p>After generating, copy your public key (<code>cat ~/.ssh/id_ed25519.pub</code>) and paste it into GitHub → Settings → SSH and GPG keys → New SSH key.</p>
+          <p>One-time setup. Never deal with passwords again.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="wf-step" onclick="toggleWf(this)">
+      <div class="wf-num" style="color:var(--git)">05</div>
+      <div class="wf-content">
+        <div class="wf-top"><div class="wf-title">Set default branch name to main</div><div class="wf-arr">›</div></div>
+        <div class="wf-body">
+          <p>Git used to default to calling the primary branch <code>master</code>. GitHub now uses <code>main</code>. Make them match to avoid confusion:</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cblock">
+    <div class="cblock-head">
+      <div class="cdots"><span style="background:#FF5F57"></span><span style="background:#FEBC2E"></span><span style="background:#28C840"></span></div>
+      <div class="cfile">terminal — complete setup commands</div>
+      <button class="ccopy" onclick="cp(this,'# Step 3: Set your identity\ngit config --global user.name \"Your Name\"\ngit config --global user.email \"you@example.com\"\n\n# Step 4: Generate SSH key\nssh-keygen -t ed25519 -C \"you@example.com\"\n\n# Step 5: Set default branch name\ngit config --global init.defaultBranch main\n\n# Verify everything is set\ngit config --global --list')">copy</button>
+    </div>
+    <div class="cscroll"><pre>
+<div class="cl"><span class="ln">1</span><span class="lc"><span class="cm"># Step 3: Set your identity</span></span></div>
+<div class="cl"><span class="ln">2</span><span class="lc"><span class="f">git</span> <span class="k">config</span> <span class="s">--global</span> <span class="w">user.name </span><span class="s">"Your Name"</span></span></div>
+<div class="cl"><span class="ln">3</span><span class="lc"><span class="f">git</span> <span class="k">config</span> <span class="s">--global</span> <span class="w">user.email </span><span class="s">"you@example.com"</span></span></div>
+<div class="cl"><span class="ln">4</span><span class="lc"></span></div>
+<div class="cl"><span class="ln">5</span><span class="lc"><span class="cm"># Step 4: Generate SSH key (press Enter 3 times for defaults)</span></span></div>
+<div class="cl"><span class="ln">6</span><span class="lc"><span class="f">ssh-keygen</span> <span class="s">-t</span> <span class="w">ed25519</span> <span class="s">-C</span> <span class="s">"you@example.com"</span></span></div>
+<div class="cl"><span class="ln">7</span><span class="lc"></span></div>
+<div class="cl"><span class="ln">8</span><span class="lc"><span class="cm"># Copy the public key to paste into GitHub</span></span></div>
+<div class="cl"><span class="ln">9</span><span class="lc"><span class="f">cat</span> <span class="w">~/.ssh/id_ed25519.pub</span></span></div>
+<div class="cl"><span class="ln">10</span><span class="lc"></span></div>
+<div class="cl"><span class="ln">11</span><span class="lc"><span class="cm"># Step 5: Default branch = main</span></span></div>
+<div class="cl"><span class="ln">12</span><span class="lc"><span class="f">git</span> <span class="k">config</span> <span class="s">--global</span> <span class="w">init.defaultBranch main</span></span></div>
+<div class="cl"><span class="ln">13</span><span class="lc"></span></div>
+<div class="cl"><span class="ln">14</span><span class="lc"><span class="cm"># Verify</span></span></div>
+<div class="cl"><span class="ln">15</span><span class="lc"><span class="f">git</span> <span class="k">config</span> <span class="s">--global</span> <span class="s">--list</span></span></div>
+    </pre></div>
+  </div>
+
+  <div class="callout blue">
+    <p><strong>You only do this once.</strong> From now on your machine knows who you are and can talk to GitHub securely. Every project you ever create will use this configuration automatically.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     SECTION 4 — DAILY WORKFLOW
+══════════════════════════════════ -->
+<div class="sec" id="sec-workflow">
+  <div class="phase-wrap"><div class="phase-tag">// SECTION 04</div><div class="phase-line"></div></div>
+  <h2>The workflow.<br><span class="hl">Seven commands. That's it.</span></h2>
+
+  <p>90% of your daily Git usage is six or seven commands. Learn these and you have what you need for every real project. The rest of Git is edge cases you look up when you need them.</p>
+
+  <div class="analogy">
+    <div class="analogy-label">// THE ANALOGY</div>
+    <p>Film sessions. Every serious program watches film. They review what happened, identify what worked, document what to improve, and make it part of the permanent record. <strong>A commit is your film session.</strong> You made a change, you reviewed it, you named it, you saved it to the record. The discipline of committing regularly is the same discipline as watching film regularly — it makes everything else better.</p>
+  </div>
+
+  <h3>Starting a new project from scratch</h3>
+  <div class="cblock">
+    <div class="cblock-head">
+      <div class="cdots"><span style="background:#FF5F57"></span><span style="background:#FEBC2E"></span><span style="background:#28C840"></span></div>
+      <div class="cfile">terminal — new project</div>
+      <button class="ccopy" onclick="cp(this,'# Create and enter your project folder\nmkdir my-project\ncd my-project\n\n# Initialize Git (creates the .git folder)\ngit init\n\n# Create your first file\necho \"# My Project\" > README.md\n\n# Stage it\ngit add README.md\n\n# Commit it\ngit commit -m \"initial commit: add README\"\n\n# Connect to GitHub (create the repo on github.com first)\ngit remote add origin git@github.com:yourusername/my-project.git\n\n# Push to GitHub\ngit push -u origin main')">copy</button>
+    </div>
+    <div class="cscroll"><pre>
+<div class="cl"><span class="ln">1</span><span class="lc"><span class="cm"># Create and enter your project folder</span></span></div>
+<div class="cl"><span class="ln">2</span><span class="lc"><span class="f">mkdir</span> <span class="w">my-project</span></span></div>
+<div class="cl"><span class="ln">3</span><span class="lc"><span class="f">cd</span> <span class="w">my-project</span></span></div>
+<div class="cl"><span class="ln">4</span><span class="lc"></span></div>
+<div class="cl"><span class="ln">5</span><span class="lc"><span class="cm"># Initialize Git — creates the hidden .git folder</span></span></div>
+<div class="cl"><span class="ln">6</span><span class="lc"><span class="f">git</span> <span class="k">init</span></span></div>
+<div class="cl"><span class="ln">7</span><span class="lc"></span></div>
+<div class="cl"><span class="ln">8</span><span class="lc"><span class="cm"># Create a README file</span></span></div>
+<div class="cl"><span class="ln">9</span><span class="lc"><span class="f">echo</span> <span class="s">"# My Project"</span> <span class="w">> README.md</span></span></div>
+<div class="cl"><span class="ln">10</span><span class="lc"></span></div>
+<div class="cl"><span class="ln">11</span><span class="lc"><span class="cm"># Stage the file (tell Git to include it in next commit)</span></span></div>
+<div class="cl"><span class="ln">12</span><span class="lc"><span class="f">git</span> <span class="k">add</span> <span class="w">README.md</span></span></div>
+<div class="cl"><span class="ln">13</span><span class="lc"></span></div>
+<div class="cl"><span class="ln">14</span><span class="lc"><span class="cm"># Commit with a descriptive message</span></span></div>
+<div class="cl"><span class="ln">15</span><span class="lc"><span class="f">git</span> <span class="k">commit</span> <span class="s">-m</span> <span class="s">"initial commit: add README"</span></span></div>
+<div class="cl"><span class="ln">16</span><span class="lc"></span></div>
+<div class="cl"><span class="ln">17</span><span class="lc"><span class="cm"># Connect your local repo to GitHub</span></span></div>
+<div class="cl"><span class="ln">18</span><span class="lc"><span class="f">git</span> <span class="k">remote add</span> <span class="w">origin</span> <span class="s">git@github.com:yourusername/my-project.git</span></span></div>
+<div class="cl"><span class="ln">19</span><span class="lc"></span></div>
+<div class="cl"><span class="ln">20</span><span class="lc"><span class="cm"># Push to GitHub (-u sets upstream, only needed first time)</span></span></div>
+<div class="cl"><span class="ln">21</span><span class="lc"><span class="f">git</span> <span class="k">push</span> <span class="s">-u</span> <span class="w">origin main</span></span></div>
+    </pre></div>
+  </div>
+
+  <h3>Every day after that — the core loop</h3>
+  <div class="cblock">
+    <div class="cblock-head">
+      <div class="cdots"><span style="background:#FF5F57"></span><span style="background:#FEBC2E"></span><span style="background:#28C840"></span></div>
+      <div class="cfile">terminal — the daily loop</div>
+      <button class="ccopy" onclick="cp(this,'# Check what changed\ngit status\n\n# See the actual changes line by line\ngit diff\n\n# Stage everything (or use a specific filename)\ngit add .\n\n# Commit\ngit commit -m \"describe what you changed and why\"\n\n# Push to GitHub\ngit push\n\n# Pull latest changes (if collaborating)\ngit pull')">copy</button>
+    </div>
+    <div class="cscroll"><pre>
+<div class="cl"><span class="ln">1</span><span class="lc"><span class="cm"># Check what's changed since last commit</span></span></div>
+<div class="cl"><span class="ln">2</span><span class="lc"><span class="f">git</span> <span class="k">status</span></span></div>
+<div class="cl"><span class="ln">3</span><span class="lc"></span></div>
+<div class="cl"><span class="ln">4</span><span class="lc"><span class="cm"># See exact line-by-line changes</span></span></div>
+<div class="cl"><span class="ln">5</span><span class="lc"><span class="f">git</span> <span class="k">diff</span></span></div>
+<div class="cl"><span class="ln">6</span><span class="lc"></span></div>
+<div class="cl"><span class="ln">7</span><span class="lc"><span class="cm"># Stage all changes ( . = everything)</span></span></div>
+<div class="cl"><span class="ln">8</span><span class="lc"><span class="f">git</span> <span class="k">add</span> <span class="w">.</span></span></div>
+<div class="cl"><span class="ln">9</span><span class="lc"></span></div>
+<div class="cl"><span class="ln">10</span><span class="lc"><span class="cm"># Commit with a clear, specific message</span></span></div>
+<div class="cl"><span class="ln">11</span><span class="lc"><span class="f">git</span> <span class="k">commit</span> <span class="s">-m</span> <span class="s">"add score tracking to quiz game"</span></span></div>
+<div class="cl"><span class="ln">12</span><span class="lc"></span></div>
+<div class="cl"><span class="ln">13</span><span class="lc"><span class="cm"># Push to GitHub</span></span></div>
+<div class="cl"><span class="ln">14</span><span class="lc"><span class="f">git</span> <span class="k">push</span></span></div>
+    </pre></div>
+  </div>
+
+  <h3>What makes a good commit message</h3>
+  <p>Your commit messages are a permanent log of your thinking. Write them like you're leaving notes for yourself six months from now — because you are.</p>
+
+  <div class="concept-grid">
+    <div class="concept-card open" style="border-color:var(--r);background:rgba(255,77,109,.04)">
+      <div class="cc-icon">✗</div>
+      <div class="cc-label" style="color:var(--r)">BAD COMMITS</div>
+      <div class="cc-title" style="color:var(--r)">Don't write these</div>
+      <div class="cc-body" style="max-height:200px;margin-top:10px">
+        <code style="display:block;margin-bottom:6px;color:var(--r)">"fix"</code>
+        <code style="display:block;margin-bottom:6px;color:var(--r)">"stuff"</code>
+        <code style="display:block;margin-bottom:6px;color:var(--r)">"changes"</code>
+        <code style="display:block;margin-bottom:6px;color:var(--r)">"asdfgh"</code>
+        <code style="display:block;margin-bottom:6px;color:var(--r)">"finally works"</code>
+        These tell you nothing. In three months you'll have no idea what "fix" refers to or why it was needed.
+      </div>
+    </div>
+    <div class="concept-card open" style="border-color:var(--g);background:rgba(0,255,178,.04)">
+      <div class="cc-icon">✓</div>
+      <div class="cc-label" style="color:var(--g)">GOOD COMMITS</div>
+      <div class="cc-title" style="color:var(--g)">Write these instead</div>
+      <div class="cc-body" style="max-height:200px;margin-top:10px">
+        <code style="display:block;margin-bottom:6px;color:var(--g)">"add user login form with validation"</code>
+        <code style="display:block;margin-bottom:6px;color:var(--g)">"fix score counter resetting on wrong answer"</code>
+        <code style="display:block;margin-bottom:6px;color:var(--g)">"refactor API calls into separate module"</code>
+        <code style="display:block;margin-bottom:6px;color:var(--g)">"add README with setup instructions"</code>
+        One idea per commit. Active verb. What changed and optionally why.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     SECTION 5 — BRANCHES
+══════════════════════════════════ -->
+<div class="sec" id="sec-branches">
+  <div class="phase-wrap"><div class="phase-tag">// SECTION 05</div><div class="phase-line"></div></div>
+  <h2>Branches.<br><span class="hl">Your most underused tool.</span></h2>
+
+  <p>Most beginners do everything on <code>main</code> and wonder why their code keeps breaking. Branches solve this. They're free to create, instant to switch between, and disposable when you're done.</p>
+
+  <div class="analogy">
+    <div class="analogy-label">// THE ANALOGY</div>
+    <p>Your starting lineup is your <strong>main branch</strong> — it's what's actually running, what performs in public, what everything depends on. When a coach wants to try a new rotation or test a player in a different position, they don't rebuild the starting lineup around an experiment. They run it in practice first. <strong>Branches are practice.</strong> Build it there, prove it works, then run it in the real game.</p>
+  </div>
+
+  <h3>What a branch history looks like</h3>
+  <div class="branch-viz">
+    <div class="bv-label">// COMMIT HISTORY — project with branches</div>
+    <div class="bv-track">
+      <div class="bv-line" style="background:linear-gradient(var(--git),var(--git))"></div>
+      <div class="bv-commit">
+        <div class="bv-dot" style="background:var(--git);border-color:var(--git)"></div>
+        <div class="bv-info">
+          <div class="bv-hash">a3f9c2d <div class="bv-branch-tag" style="color:var(--g);border-color:var(--g)">main</div></div>
+          <div class="bv-msg">merge: add score tracking feature</div>
+          <div class="bv-meta">today · merged from feature/score-tracking</div>
+        </div>
+      </div>
+      <div class="bv-commit">
+        <div class="bv-dot" style="background:var(--b);border-color:var(--b)"></div>
+        <div class="bv-info">
+          <div class="bv-hash">7e2b44f <div class="bv-branch-tag" style="color:var(--b);border-color:var(--b)">feature/score-tracking</div></div>
+          <div class="bv-msg">add high score persistence to localStorage</div>
+          <div class="bv-meta">yesterday</div>
+        </div>
+      </div>
+      <div class="bv-commit">
+        <div class="bv-dot" style="background:var(--b);border-color:var(--b)"></div>
+        <div class="bv-info">
+          <div class="bv-hash">c91de03</div>
+          <div class="bv-msg">add live score counter display</div>
+          <div class="bv-meta">2 days ago</div>
+        </div>
+      </div>
+      <div class="bv-commit">
+        <div class="bv-dot" style="background:var(--git);border-color:var(--git)"></div>
+        <div class="bv-info">
+          <div class="bv-hash">f4820ca <div class="bv-branch-tag" style="color:var(--g);border-color:var(--g)">main</div></div>
+          <div class="bv-msg">add question shuffle logic</div>
+          <div class="bv-meta">3 days ago</div>
+        </div>
+      </div>
+      <div class="bv-commit">
+        <div class="bv-dot" style="background:var(--git);border-color:var(--git)"></div>
+        <div class="bv-info">
+          <div class="bv-hash">b19a7e1</div>
+          <div class="bv-msg">initial commit: project scaffold</div>
+          <div class="bv-meta">4 days ago</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h3>The branch workflow</h3>
+  <div class="cblock">
+    <div class="cblock-head">
+      <div class="cdots"><span style="background:#FF5F57"></span><span style="background:#FEBC2E"></span><span style="background:#28C840"></span></div>
+      <div class="cfile">terminal — branch workflow</div>
+      <button class="ccopy" onclick="cp(this,'# Create a new branch and switch to it\ngit checkout -b feature/score-tracking\n\n# (do your work, commit normally)\ngit add .\ngit commit -m \"add score counter display\"\n\n# Push branch to GitHub\ngit push -u origin feature/score-tracking\n\n# When done: switch back to main\ngit checkout main\n\n# Merge your branch in\ngit merge feature/score-tracking\n\n# Push the updated main\ngit push\n\n# Delete the branch (optional, keeps things clean)\ngit branch -d feature/score-tracking')">copy</button>
+    </div>
+    <div class="cscroll"><pre>
+<div class="cl"><span class="ln">1</span><span class="lc"><span class="cm"># Create + switch to a new branch in one command</span></span></div>
+<div class="cl"><span class="ln">2</span><span class="lc"><span class="f">git</span> <span class="k">checkout</span> <span class="s">-b</span> <span class="w">feature/score-tracking</span></span></div>
+<div class="cl"><span class="ln">3</span><span class="lc"></span></div>
+<div class="cl"><span class="ln">4</span><span class="lc"><span class="cm"># Work and commit normally on this branch</span></span></div>
+<div class="cl"><span class="ln">5</span><span class="lc"><span class="f">git</span> <span class="k">add</span> <span class="w">.</span></span></div>
+<div class="cl"><span class="ln">6</span><span class="lc"><span class="f">git</span> <span class="k">commit</span> <span class="s">-m</span> <span class="s">"add score counter display"</span></span></div>
+<div class="cl"><span class="ln">7</span><span class="lc"></span></div>
+<div class="cl"><span class="ln">8</span><span class="lc"><span class="cm"># Push branch to GitHub</span></span></div>
+<div class="cl"><span class="ln">9</span><span class="lc"><span class="f">git</span> <span class="k">push</span> <span class="s">-u</span> <span class="w">origin feature/score-tracking</span></span></div>
+<div class="cl"><span class="ln">10</span><span class="lc"></span></div>
+<div class="cl"><span class="ln">11</span><span class="lc"><span class="cm"># Done with the feature — switch back to main</span></span></div>
+<div class="cl"><span class="ln">12</span><span class="lc"><span class="f">git</span> <span class="k">checkout</span> <span class="w">main</span></span></div>
+<div class="cl"><span class="ln">13</span><span class="lc"></span></div>
+<div class="cl"><span class="ln">14</span><span class="lc"><span class="cm"># Merge feature into main</span></span></div>
+<div class="cl"><span class="ln">15</span><span class="lc"><span class="f">git</span> <span class="k">merge</span> <span class="w">feature/score-tracking</span></span></div>
+<div class="cl"><span class="ln">16</span><span class="lc"></span></div>
+<div class="cl"><span class="ln">17</span><span class="lc"><span class="cm"># Push updated main to GitHub</span></span></div>
+<div class="cl"><span class="ln">18</span><span class="lc"><span class="f">git</span> <span class="k">push</span></span></div>
+<div class="cl"><span class="ln">19</span><span class="lc"></span></div>
+<div class="cl"><span class="ln">20</span><span class="lc"><span class="cm"># Clean up — delete the branch</span></span></div>
+<div class="cl"><span class="ln">21</span><span class="lc"><span class="f">git</span> <span class="k">branch</span> <span class="s">-d</span> <span class="w">feature/score-tracking</span></span></div>
+    </pre></div>
+  </div>
+
+  <div class="callout">
+    <p><strong>Naming branches:</strong> use <code>feature/what-it-does</code> for new features, <code>fix/what-it-fixes</code> for bug fixes. This makes your history readable and your professional habits obvious to anyone who looks at your repo.</p>
+  </div>
+
+  <h3>Knowledge check</h3>
+  <div id="quiz2" class="quiz-box">
+    <div class="quiz-q">Your quiz game is live on <code>main</code>. You want to add a new timer feature that might take a week to build. What do you do?</div>
+    <div class="quiz-opts">
+      <div class="quiz-opt" onclick="answer(this,'wrong','quiz2')">Build it on <code>main</code> — it's faster and I work alone</div>
+      <div class="quiz-opt" onclick="answer(this,'correct','quiz2')">Create <code>feature/timer</code>, build there, merge when it's working</div>
+      <div class="quiz-opt" onclick="answer(this,'wrong','quiz2')">Create a new repo for the timer version</div>
+    </div>
+    <div class="quiz-feedback" id="quiz2-fb"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     SECTION 6 — PUBLISH LIVE
+══════════════════════════════════ -->
+<div class="sec" id="sec-pages">
+  <div class="phase-wrap"><div class="phase-tag">// SECTION 06</div><div class="phase-line"></div></div>
+  <h2>Publish your work.<br><span class="hl">Free. Tonight.</span></h2>
+
+  <p>GitHub Pages lets you deploy a live website directly from your repository. Free, no server, no hosting account. If your project has an <code>index.html</code>, it can be live at <code>yourusername.github.io/project-name</code> in under five minutes.</p>
+
+  <div class="analogy">
+    <div class="analogy-label">// THE ANALOGY</div>
+    <p>There's a difference between a player who practices in the gym and a player who performs in a game. Both are working. Only one has a record. <strong>GitHub Pages is your game tape.</strong> It's the difference between "I built a quiz game" and "here's the link, try it right now." The link ends every conversation.</p>
+  </div>
+
+  <div class="pages-steps">
+    <div class="ps-item">
+      <div class="ps-num" style="color:var(--git)">01</div>
+      <div class="ps-content">
+        <div class="ps-title">Make sure your project has an index.html</div>
+        <div class="ps-body">GitHub Pages serves whatever is at the root of your repo as a website. Your main HTML file needs to be named <code>index.html</code>. If you have a JavaScript app or a different structure, there are ways to configure it — but start with a plain HTML project to get the pattern.</div>
+      </div>
+    </div>
+    <div class="ps-item">
+      <div class="ps-num" style="color:var(--git)">02</div>
+      <div class="ps-content">
+        <div class="ps-title">Push your project to GitHub</div>
+        <div class="ps-body">If you followed Section 4, your repo is already on GitHub. Make sure your latest code is pushed: <code>git add . && git commit -m "prepare for deployment" && git push</code></div>
+      </div>
+    </div>
+    <div class="ps-item">
+      <div class="ps-num" style="color:var(--git)">03</div>
+      <div class="ps-content">
+        <div class="ps-title">Enable GitHub Pages in Settings</div>
+        <div class="ps-body">On your repo page on github.com → <strong>Settings</strong> tab → <strong>Pages</strong> in the left sidebar → Source: <strong>Deploy from a branch</strong> → Branch: <strong>main</strong> → folder: <strong>/ (root)</strong> → click Save.</div>
+      </div>
+    </div>
+    <div class="ps-item">
+      <div class="ps-num" style="color:var(--git)">04</div>
+      <div class="ps-content">
+        <div class="ps-title">Wait 60 seconds. Your site is live.</div>
+        <div class="ps-body">GitHub will show you the URL: <code>https://yourusername.github.io/your-repo-name</code>. It takes about a minute to deploy on the first push, then updates automatically every time you push new commits. Share the link. That's real.</div>
+      </div>
+    </div>
+    <div class="ps-item">
+      <div class="ps-num" style="color:var(--git)">05</div>
+      <div class="ps-content">
+        <div class="ps-title">Add a custom domain later (optional)</div>
+        <div class="ps-body">If you eventually want <code>yourname.com</code> instead of <code>github.io</code>, buy a domain ($10–15/yr on Namecheap or Cloudflare), then configure it in the same Pages settings. GitHub handles the HTTPS certificate automatically. No cost, no server.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout">
+    <p><strong>Your README is your storefront.</strong> Every repo should have a README that explains what the project does, how to run it, and what you learned building it. GitHub renders it as the first thing visitors see. Write it like you're pitching the project to someone who's never heard of it — because you are.</p>
+  </div>
+
+  <div class="cblock">
+    <div class="cblock-head">
+      <div class="cdots"><span style="background:#FF5F57"></span><span style="background:#FEBC2E"></span><span style="background:#28C840"></span></div>
+      <div class="cfile">README.md — template</div>
+      <button class="ccopy" onclick="cp(this,'# Project Name\n\nOne sentence: what does this do?\n\n## Live Demo\n[Try it here](https://yourusername.github.io/project-name)\n\n## What I Built\nShort description of what the project is and why you built it.\n\n## What I Learned\n- Technical skill or concept\n- Problem you solved\n- Approach you tried that didn\'t work and what you did instead\n\n## Stack\n- HTML / CSS / JavaScript\n- Any libraries or APIs used\n\n## Run Locally\n```bash\ngit clone https://github.com/yourusername/project-name\nopen index.html\n```')">copy</button>
+    </div>
+    <div class="cscroll"><pre>
+<div class="cl"><span class="ln">1</span><span class="lc"><span class="gt"># Project Name</span></span></div>
+<div class="cl"><span class="ln">2</span><span class="lc"></span></div>
+<div class="cl"><span class="ln">3</span><span class="lc"><span class="w">One sentence: what does this do?</span></span></div>
+<div class="cl"><span class="ln">4</span><span class="lc"></span></div>
+<div class="cl"><span class="ln">5</span><span class="lc"><span class="gt">## Live Demo</span></span></div>
+<div class="cl"><span class="ln">6</span><span class="lc"><span class="s">[Try it here]</span><span class="w">(https://yourusername.github.io/project-name)</span></span></div>
+<div class="cl"><span class="ln">7</span><span class="lc"></span></div>
+<div class="cl"><span class="ln">8</span><span class="lc"><span class="gt">## What I Built</span></span></div>
+<div class="cl"><span class="ln">9</span><span class="lc"><span class="w">Short description and why you built it.</span></span></div>
+<div class="cl"><span class="ln">10</span><span class="lc"></span></div>
+<div class="cl"><span class="ln">11</span><span class="lc"><span class="gt">## What I Learned</span></span></div>
+<div class="cl"><span class="ln">12</span><span class="lc"><span class="w">- Technical skill or concept</span></span></div>
+<div class="cl"><span class="ln">13</span><span class="lc"><span class="w">- Problem you solved</span></span></div>
+<div class="cl"><span class="ln">14</span><span class="lc"><span class="w">- What didn't work and what you did instead</span></span></div>
+<div class="cl"><span class="ln">15</span><span class="lc"></span></div>
+<div class="cl"><span class="ln">16</span><span class="lc"><span class="gt">## Stack</span></span></div>
+<div class="cl"><span class="ln">17</span><span class="lc"><span class="w">- HTML / CSS / JavaScript</span></span></div>
+<div class="cl"><span class="ln">18</span><span class="lc"><span class="w">- Any libraries or APIs used</span></span></div>
+    </pre></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     SECTION 7 — BUILD IN PUBLIC
+══════════════════════════════════ -->
+<div class="sec" id="sec-habits">
+  <div class="phase-wrap"><div class="phase-tag">// SECTION 07</div><div class="phase-line"></div></div>
+  <h2>Build in public.<br><span class="hl">Your reputation compounds.</span></h2>
+
+  <p>GitHub isn't just storage. It's a live record of your development as a builder. The people who use it most effectively treat their commit history like a public log — not just of what they built, but of how they think.</p>
+
+  <h3>Habits that separate serious builders from hobbyists</h3>
+
+  <div class="checklist" id="cl-habits">
+    <div class="check-item" onclick="toggleCheck(this)">
+      <div class="check-box">✓</div>
+      <div class="check-content">
+        <div class="check-title">Commit every working session</div>
+        <div class="check-desc">Even if you only wrote 10 lines. Even if it's not finished. A commit at the end of every session means your history reflects actual work, not just completion moments. Consistency compounds over time.</div>
+      </div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this)">
+      <div class="check-box">✓</div>
+      <div class="check-content">
+        <div class="check-title">Write your README before you consider the project done</div>
+        <div class="check-desc">A project without a README is a project only you can use. The README is the first thing any potential collaborator, employer, or professor reads. Write it like your repo is receiving visitors — because it is.</div>
+      </div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this)">
+      <div class="check-box">✓</div>
+      <div class="check-content">
+        <div class="check-title">Don't wait for finished — push works in progress</div>
+        <div class="check-desc">Unfinished work on GitHub is still evidence of work. A half-built tool with 40 commits and a clear README is more impressive than a finished project that appeared in one commit. The process is part of the portfolio.</div>
+      </div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this)">
+      <div class="check-box">✓</div>
+      <div class="check-content">
+        <div class="check-title">Pin your best repos to your profile</div>
+        <div class="check-desc">GitHub lets you pin up to 6 repositories to the top of your profile. Choose the ones that best represent what you can do. Update them as your work improves. Your profile is a living portfolio — treat it like one.</div>
+      </div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this)">
+      <div class="check-box">✓</div>
+      <div class="check-content">
+        <div class="check-title">Use Issues to track your own ideas</div>
+        <div class="check-desc">GitHub Issues aren't just for bugs in team projects. On your own repos, use them to track features you want to build, problems you hit, and ideas you have. It documents your thinking — and it looks professional when someone looks at your repo.</div>
+      </div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this)">
+      <div class="check-box">✓</div>
+      <div class="check-content">
+        <div class="check-title">Read other people's code</div>
+        <div class="check-desc">Every open source project on GitHub is readable. Find a tool you use, go to its repo, read the code. You don't have to understand it all. The habit of reading production code — how real engineers structure, name, and comment things — improves your own work faster than any tutorial.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="analogy">
+    <div class="analogy-label">// THE ANALOGY</div>
+    <p>The best players in the league have a body of work that speaks for itself — every game in the record, every stat tracked, every highlight accessible. Your GitHub is that record. <strong>The green squares on your contribution graph are your game log.</strong> They don't lie about whether you're putting in the work. Build the kind of profile that speaks before you have to.</p>
+  </div>
+
+  <div class="callout">
+    <p><strong>The cold email that works:</strong> "I built X. Here's the link. I'm interested in Y. Here's what I've been working on: [github.com/yourprofile]." That combination — a deployed project and an active profile — opens doors that a resume alone never does.</p>
+  </div>
+
+  <div class="foot-hint" id="foot" onclick="footTap()">· · ·</div>
+</div>
+
+</div><!-- /main -->
+</div><!-- /layout -->
+
+<script>
+// ── TOAST ──────────────────────────────────────────────────────────────────
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200);}
+
+// ── COPY CODE ──────────────────────────────────────────────────────────────
+function cp(btn,text){
+  function fb(){const ta=document.createElement('textarea');ta.value=text;ta.style.cssText='position:fixed;opacity:0;top:0;left:0';document.body.appendChild(ta);ta.focus();ta.select();try{document.execCommand('copy');}catch(e){}document.body.removeChild(ta);btn.textContent='✓ copied';btn.classList.add('done');setTimeout(()=>{btn.textContent='copy';btn.classList.remove('done');},2000);}
+  if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(text).then(()=>{btn.textContent='✓ copied';btn.classList.add('done');setTimeout(()=>{btn.textContent='copy';btn.classList.remove('done');},2000);}).catch(fb);}else{fb();}
+}
+
+// ── JUMP ──────────────────────────────────────────────────────────────────
+function jump(id){const el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});}
+
+// ── WORKFLOW ACCORDION ────────────────────────────────────────────────────
+function toggleWf(el){const was=el.classList.contains('open');el.closest('.workflow').querySelectorAll('.wf-step').forEach(s=>s.classList.remove('open'));if(!was)el.classList.add('open');}
+
+// ── CHECKLIST ─────────────────────────────────────────────────────────────
+function toggleCheck(el){
+  el.classList.toggle('done-item');
+  updateProgress();
+}
+
+// ── QUIZ ──────────────────────────────────────────────────────────────────
+const QUIZ_FB = {
+  quiz1:{
+    correct:"Correct. <code>main</code> is your production line. Experiments go on branches. Merge when it's proven, not before.",
+    wrong:"Not quite. Working directly on main means your stable code is at risk every time you try something new. Branches exist precisely for this."
+  },
+  quiz2:{
+    correct:"Exactly. Build in isolation on a feature branch. Your live <code>main</code> stays clean and working the entire time. Merge when the feature is ready.",
+    wrong:"A new repo for every feature would be chaos — you'd lose the shared history and context. Branches are the right tool for this."
+  }
+};
+
+function answer(el,result,quizId){
+  const box=document.getElementById(quizId);
+  box.querySelectorAll('.quiz-opt').forEach(o=>o.style.pointerEvents='none');
+  el.classList.add(result);
+  const fb=document.getElementById(quizId+'-fb');
+  fb.innerHTML=QUIZ_FB[quizId][result];
+  fb.className='quiz-feedback show '+result;
+  updateProgress();
+}
+
+// ── PROGRESS ──────────────────────────────────────────────────────────────
+const SECS=['sec-mental','sec-concepts','sec-setup','sec-workflow','sec-branches','sec-pages','sec-habits'];
+let completedSecs=new Set();
+
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(!e.isIntersecting)return;
+    const i=SECS.indexOf(e.target.id);
+    if(i>=0){
+      completedSecs.add(i);
+      document.querySelectorAll('.tab').forEach((t,j)=>t.classList.toggle('on',j===i));
+      document.querySelectorAll('.nav-item').forEach((n,j)=>n.classList.toggle('active',j===i));
+      updateProgress();
+    }
+  });
+},{threshold:.25,rootMargin:'-56px 0px 0px 0px'});
+SECS.forEach(id=>{const el=document.getElementById(id);if(el)obs.observe(el);});
+
+const fadeObs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis');});},{threshold:.07});
+document.querySelectorAll('.sec').forEach(s=>fadeObs.observe(s));
+
+function updateProgress(){
+  // count all checked items
+  const allChecks=document.querySelectorAll('.check-item').length;
+  const doneChecks=document.querySelectorAll('.check-item.done-item').length;
+  const quizDone=document.querySelectorAll('.quiz-opt.correct').length;
+  const total=allChecks+2;
+  const done=doneChecks+quizDone+completedSecs.size;
+  const pct=Math.min(100,Math.round((done/Math.max(total+SECS.length,1))*100));
+  document.getElementById('progress-fill').style.width=pct+'%';
+  document.getElementById('progress-count').textContent=`${completedSecs.size} of ${SECS.length} sections visited`;
+  // update nav checks for visited sections
+  SECS.forEach((id,i)=>{
+    const nc=document.getElementById('nc-'+i);
+    const ni=document.querySelectorAll('.nav-item')[i];
+    if(completedSecs.has(i)){
+      nc.textContent='✓';nc.classList.add('done-item');
+      ni?.classList.add('done');
+    }
+  });
+}
+
+// ── SCROLL SPY ────────────────────────────────────────────────────────────
+let ftaps=0;
+function footTap(){
+  ftaps++;
+  if(ftaps>=3){
+    ftaps=0;
+    showSecret();
+  }
+}
+
+// ── SECRET ────────────────────────────────────────────────────────────────
+function showSecret(){
+  const lines=[
+    "The contribution graph doesn't lie.",
+    "Green squares are reps. Reps are proof.",
+    "Giannis didn't wake up a two-time MVP. He showed up every day and put it in the record.",
+    "Your GitHub is your court. The commits are your game log.",
+    "Nobody cares what you're capable of. They care what you've done.",
+    "Start the repo. Write the first commit. Push it tonight."
+  ];
+  document.getElementById('mtitle').textContent='// the only thing left to say';
+  const body=document.getElementById('mbody');body.innerHTML='';
+  lines.forEach((l,i)=>{
+    const d=document.createElement('div');d.className='mline'+(i===lines.length-1?' last':'');
+    d.textContent=l;body.appendChild(d);
+    setTimeout(()=>d.classList.add('vis'),i*380+100);
+  });
+  const dis=document.getElementById('mdis');dis.classList.remove('show');
+  setTimeout(()=>dis.classList.add('show'),lines.length*380+200);
+  document.getElementById('modal').classList.add('open');
+}
+
+function closeModal(){document.getElementById('modal').classList.remove('open');}
+
+// ── KONAMI ────────────────────────────────────────────────────────────────
+let kseq=[];
+const KONAMI=['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
+document.addEventListener('keydown',e=>{
+  kseq.push(e.key);kseq=kseq.slice(-10);
+  if(JSON.stringify(kseq)===JSON.stringify(KONAMI)){
+    const lines=[
+      "↑↑↓↓←→←→BA. You know what that is.",
+      "Konami Code. 30 lives. 1986.",
+      "Hidden things reward the people paying attention.",
+      "Put Easter eggs in your code. The developers who find them will remember you.",
+      "Now go. First commit. Tonight.",
+      "git add . && git commit -m \"start\" && git push"
+    ];
+    document.getElementById('mtitle').textContent='// cheat code activated';
+    const body=document.getElementById('mbody');body.innerHTML='';
+    lines.forEach((l,i)=>{
+      const d=document.createElement('div');d.className='mline'+(i===lines.length-1?' last':'');
+      d.textContent=(i===0?'$ ':' ')+l;body.appendChild(d);
+      setTimeout(()=>d.classList.add('vis'),i*340+80);
+    });
+    const dis=document.getElementById('mdis');dis.classList.remove('show');
+    setTimeout(()=>dis.classList.add('show'),lines.length*340+200);
+    document.getElementById('modal').classList.add('open');
+    kseq=[];
+  }
+});
+</script>
+</body>
+</html>
