@@ -261,7 +261,8 @@ pre{margin:0;line-height:1.75;}
     <div class="nav-item" onclick="jump('sec-workflow')"><div class="nav-check" id="nc-3"></div>The Daily Workflow</div>
     <div class="nav-item" onclick="jump('sec-branches')"><div class="nav-check" id="nc-4"></div>Branches</div>
     <div class="nav-item" onclick="jump('sec-pages')"><div class="nav-check" id="nc-5"></div>Publish Live</div>
-    <div class="nav-item" onclick="jump('sec-habits')"><div class="nav-check" id="nc-6"></div>Build in Public</div>
+    <div class="nav-item" onclick="jump('sec-trouble')"><div class="nav-check" id="nc-6"></div>Troubleshooting</div>
+    <div class="nav-item" onclick="jump('sec-habits')"><div class="nav-check" id="nc-7"></div>Build in Public</div>
   </div>
   <div class="sb-bottom">
     <div class="sb-stat">Commits to make today <span>1</span></div>
@@ -279,6 +280,7 @@ pre{margin:0;line-height:1.75;}
   <div class="tab" onclick="jump('sec-workflow')"><div class="tab-dot"></div>workflow</div>
   <div class="tab" onclick="jump('sec-branches')"><div class="tab-dot"></div>branches</div>
   <div class="tab" onclick="jump('sec-pages')"><div class="tab-dot"></div>publish</div>
+  <div class="tab" onclick="jump('sec-trouble')"><div class="tab-dot"></div>troubleshooting</div>
   <div class="tab" onclick="jump('sec-habits')"><div class="tab-dot"></div>build_in_public</div>
 </div>
 
@@ -760,62 +762,154 @@ pre{margin:0;line-height:1.75;}
 ══════════════════════════════════ -->
 <div class="sec" id="sec-pages">
   <div class="phase-wrap"><div class="phase-tag">// SECTION 06</div><div class="phase-line"></div></div>
-  <h2>Publish your work.<br><span class="hl">Free. Tonight.</span></h2>
+  <h2>GitHub stores code.<br><span class="hl">Pages makes it live.</span></h2>
 
-  <p>GitHub Pages lets you deploy a live website directly from your repository. Free, no server, no hosting account. If your project has an <code>index.html</code>, it can be live at <code>yourusername.github.io/project-name</code> in under five minutes.</p>
+  <p>These are two different things that live in the same place — and confusing them is the #1 reason people get stuck at this stage.</p>
 
-  <div class="analogy">
-    <div class="analogy-label">// THE ANALOGY</div>
-    <p>There's a difference between a player who practices in the gym and a player who performs in a game. Both are working. Only one has a record. <strong>GitHub Pages is your game tape.</strong> It's the difference between "I built a quiz game" and "here's the link, try it right now." The link ends every conversation.</p>
+  <div class="concept-grid" style="margin-bottom:8px">
+    <div class="concept-card open" style="border-color:var(--border);background:var(--bg2);cursor:default">
+      <div class="cc-icon">📦</div>
+      <div class="cc-label">GITHUB — STORAGE</div>
+      <div class="cc-title">Shows raw code</div>
+      <div class="cc-body" style="max-height:140px;margin-top:10px">When you push a file to GitHub, you can view the raw source code on github.com. An HTML file shows you the HTML. A Python file shows you the Python. GitHub does not run or render files — it stores and displays them as text.</div>
+    </div>
+    <div class="concept-card open" style="border-color:var(--git);background:rgba(240,136,62,.04);cursor:default">
+      <div class="cc-icon">🌐</div>
+      <div class="cc-label">GITHUB PAGES — HOSTING</div>
+      <div class="cc-title">Serves a live webpage</div>
+      <div class="cc-body" style="max-height:140px;margin-top:10px">GitHub Pages is a hosting service built on top of your repo. Enable it and GitHub takes your <code>index.html</code>, serves it as a real webpage at a public URL, and runs all your CSS and JavaScript. The same file that showed raw code on GitHub becomes a fully interactive site anyone can open on any device.</div>
+    </div>
   </div>
+
+  <div class="callout">
+    <p><strong>The complete loop:</strong> build it locally → push to GitHub → Pages serves it live → share the URL. Every push to <code>main</code> updates the live site automatically within 60 seconds. No re-deploying, no extra steps.</p>
+  </div>
+
+  <h3>What Pages can and cannot host</h3>
+  <div class="concept-grid">
+    <div class="concept-card open" style="border-color:var(--g);background:rgba(0,255,178,.04);cursor:default">
+      <div class="cc-icon">✓</div>
+      <div class="cc-label" style="color:var(--g)">WORKS ON PAGES</div>
+      <div class="cc-title" style="color:var(--g)">Static files</div>
+      <div class="cc-body" style="max-height:160px;margin-top:10px">HTML, CSS, JavaScript — fully rendered and interactive. Single-page apps, tools, games, calculators, dashboards. This guide itself is a perfect example — one HTML file, full interactivity, hosted free on Pages.</div>
+    </div>
+    <div class="concept-card open" style="border-color:var(--r);background:rgba(255,77,109,.04);cursor:default">
+      <div class="cc-icon">✗</div>
+      <div class="cc-label" style="color:var(--r)">DOES NOT WORK ON PAGES</div>
+      <div class="cc-title" style="color:var(--r)">Server-side code</div>
+      <div class="cc-body" style="max-height:160px;margin-top:10px">Python, Node.js, databases, server APIs. Anything that needs to execute code before responding to a user. When you hit this wall — and you will — use Vercel, Railway, or Render (all have free tiers). For now, Pages handles everything you're building.</div>
+    </div>
+  </div>
+
+  <h3>The one rule that controls everything</h3>
+  <p>GitHub Pages looks for exactly one file to serve as your homepage: <code>index.html</code> — lowercase, at the root of your repo. Not <code>app.html</code>. Not <code>my-project.html</code>. Not <code>index.HTML</code>. It must be <code>index.html</code>. If that file doesn't exist in your repo, Pages has nothing to serve and your URL will show the README instead.</p>
+
+  <div class="callout red">
+    <p><strong>Before you enable Pages — verify this first:</strong> go to <code>github.com/yourusername/your-repo</code> and confirm you can see <code>index.html</code> listed as a file. If you can't see it there, it hasn't pushed yet. Fix that before touching the Pages settings.</p>
+  </div>
+
+  <h3>Complete deploy sequence — in order, nothing skipped</h3>
 
   <div class="pages-steps">
     <div class="ps-item">
       <div class="ps-num" style="color:var(--git)">01</div>
       <div class="ps-content">
-        <div class="ps-title">Make sure your project has an index.html</div>
-        <div class="ps-body">GitHub Pages serves whatever is at the root of your repo as a website. Your main HTML file needs to be named <code>index.html</code>. If you have a JavaScript app or a different structure, there are ways to configure it — but start with a plain HTML project to get the pattern.</div>
+        <div class="ps-title">Name your HTML file <code>index.html</code></div>
+        <div class="ps-body">Your main HTML file must be named exactly <code>index.html</code>. If it has any other name, rename it now before doing anything else. The rename and the push must happen together — renaming locally without pushing means GitHub still has the old filename.</div>
       </div>
     </div>
     <div class="ps-item">
       <div class="ps-num" style="color:var(--git)">02</div>
       <div class="ps-content">
-        <div class="ps-title">Push your project to GitHub</div>
-        <div class="ps-body">If you followed Section 4, your repo is already on GitHub. Make sure your latest code is pushed: <code>git add . && git commit -m "prepare for deployment" && git push</code></div>
+        <div class="ps-title">Rename, commit, and push as one sequence</div>
+        <div class="ps-body">Do not rename and stop. Do not rename, then push later. Run all four commands back to back:</div>
       </div>
     </div>
     <div class="ps-item">
       <div class="ps-num" style="color:var(--git)">03</div>
       <div class="ps-content">
-        <div class="ps-title">Enable GitHub Pages in Settings</div>
-        <div class="ps-body">On your repo page on github.com → <strong>Settings</strong> tab → <strong>Pages</strong> in the left sidebar → Source: <strong>Deploy from a branch</strong> → Branch: <strong>main</strong> → folder: <strong>/ (root)</strong> → click Save.</div>
+        <div class="ps-title">Verify the file is on GitHub before enabling Pages</div>
+        <div class="ps-body">Open <code>github.com/yourusername/your-repo</code> in your browser. Look at the file list. You must see <code>index.html</code> there. If you see the old filename — the push didn't complete. Re-run <code>git push</code> and check again. Do not move to the next step until <code>index.html</code> is visible on GitHub.</div>
       </div>
     </div>
     <div class="ps-item">
       <div class="ps-num" style="color:var(--git)">04</div>
       <div class="ps-content">
-        <div class="ps-title">Wait 60 seconds. Your site is live.</div>
-        <div class="ps-body">GitHub will show you the URL: <code>https://yourusername.github.io/your-repo-name</code>. It takes about a minute to deploy on the first push, then updates automatically every time you push new commits. Share the link. That's real.</div>
+        <div class="ps-title">Enable GitHub Pages</div>
+        <div class="ps-body">On your repo page → <strong>Settings</strong> tab → <strong>Pages</strong> in the left sidebar → Source: <strong>Deploy from a branch</strong> → Branch: <strong>main</strong> → Folder: <strong>/ (root)</strong> → click <strong>Save</strong>.<br><br><strong>If Save is greyed out:</strong> change the Branch dropdown to <strong>None</strong>, click Save, then change it back to <strong>main</strong>, set folder to <strong>/ (root)</strong>, click Save again. This resets the state and unsticks the button.</div>
       </div>
     </div>
     <div class="ps-item">
       <div class="ps-num" style="color:var(--git)">05</div>
       <div class="ps-content">
-        <div class="ps-title">Add a custom domain later (optional)</div>
-        <div class="ps-body">If you eventually want <code>yourname.com</code> instead of <code>github.io</code>, buy a domain ($10–15/yr on Namecheap or Cloudflare), then configure it in the same Pages settings. GitHub handles the HTTPS certificate automatically. No cost, no server.</div>
+        <div class="ps-title">Wait 60 seconds — then open your URL</div>
+        <div class="ps-body">Refresh the Pages settings page. You'll see a green banner with your live URL:<br><br><code>https://yourusername.github.io/repo-name/</code><br><br>Open it. Your site should be fully rendered and interactive. If it still shows the README — wait another 30 seconds and hard refresh (<code>Cmd+Shift+R</code> on Mac). GitHub sometimes takes a moment to propagate the first deploy.</div>
+      </div>
+    </div>
+    <div class="ps-item">
+      <div class="ps-num" style="color:var(--git)">06</div>
+      <div class="ps-content">
+        <div class="ps-title">Update your README with the live URL</div>
+        <div class="ps-body">Open your README, replace any placeholder link with your real Pages URL. Then push that change. Anyone who visits your repo on GitHub now sees the live link immediately at the top of the README.</div>
       </div>
     </div>
   </div>
 
+  <div class="cblock">
+    <div class="cblock-head">
+      <div class="cdots"><span style="background:#FF5F57"></span><span style="background:#FEBC2E"></span><span style="background:#28C840"></span></div>
+      <div class="cfile">terminal — complete rename and deploy sequence</div>
+      <button class="ccopy" onclick="cp(this,'# Step 1: Rename your file to index.html\nmv your-file.html index.html\n\n# Step 2: Commit and push immediately — do not stop here\ngit add .\ngit commit -m \"rename to index.html for GitHub Pages\"\ngit push\n\n# Step 3: Verify on GitHub BEFORE enabling Pages\n# Open github.com/yourusername/your-repo\n# Confirm index.html appears in the file list\n# If you don\'t see it — run git push again\n\n# Step 4: Enable Pages on github.com\n# Settings → Pages → Deploy from branch → main → / (root) → Save\n# If Save is greyed out: set branch to None → Save, then back to main → Save\n\n# Step 5: Your live URL\n# https://yourusername.github.io/repo-name/')">copy</button>
+    </div>
+    <div class="cscroll"><pre>
+<div class="cl"><span class="ln">1</span><span class="lc"><span class="cm"># Step 1: Rename your file to index.html</span></span></div>
+<div class="cl"><span class="ln">2</span><span class="lc"><span class="f">mv</span> <span class="w">your-file.html index.html</span></span></div>
+<div class="cl"><span class="ln">3</span><span class="lc"></span></div>
+<div class="cl"><span class="ln">4</span><span class="lc"><span class="cm"># Step 2: Commit and push immediately — do not stop here</span></span></div>
+<div class="cl"><span class="ln">5</span><span class="lc"><span class="f">git</span> <span class="k">add</span> <span class="w">.</span></span></div>
+<div class="cl"><span class="ln">6</span><span class="lc"><span class="f">git</span> <span class="k">commit</span> <span class="s">-m</span> <span class="s">"rename to index.html for GitHub Pages"</span></span></div>
+<div class="cl"><span class="ln">7</span><span class="lc"><span class="f">git</span> <span class="k">push</span></span></div>
+<div class="cl"><span class="ln">8</span><span class="lc"></span></div>
+<div class="cl"><span class="ln">9</span><span class="lc"><span class="cm"># Step 3: VERIFY on github.com before touching Pages settings</span></span></div>
+<div class="cl"><span class="ln">10</span><span class="lc"><span class="cm"># You must see index.html in the file list on GitHub</span></span></div>
+<div class="cl"><span class="ln">11</span><span class="lc"><span class="cm"># If you don't — run git push again and check again</span></span></div>
+<div class="cl"><span class="ln">12</span><span class="lc"></span></div>
+<div class="cl"><span class="ln">13</span><span class="lc"><span class="cm"># Step 4: Enable on github.com</span></span></div>
+<div class="cl"><span class="ln">14</span><span class="lc"><span class="cm"># Settings → Pages → main → / (root) → Save</span></span></div>
+<div class="cl"><span class="ln">15</span><span class="lc"><span class="cm"># Save greyed out? None → Save → main → Save</span></span></div>
+<div class="cl"><span class="ln">16</span><span class="lc"></span></div>
+<div class="cl"><span class="ln">17</span><span class="lc"><span class="cm"># Step 5: Your live URL</span></span></div>
+<div class="cl"><span class="ln">18</span><span class="lc"><span class="gt">https://yourusername.github.io/repo-name/</span></span></div>
+    </pre></div>
+  </div>
+
+  <h3>From this point forward</h3>
+  <p>You never touch Pages settings again. The connection is permanent. Every time you push to <code>main</code> your live site updates automatically. The workflow from here is simply:</p>
+
+  <div class="cblock">
+    <div class="cblock-head">
+      <div class="cdots"><span style="background:#FF5F57"></span><span style="background:#FEBC2E"></span><span style="background:#28C840"></span></div>
+      <div class="cfile">terminal — update live site</div>
+      <button class="ccopy" onclick="cp(this,'# Make your changes locally\n# Then:\ngit add .\ngit commit -m \"describe what changed\"\ngit push\n# Live site updates in ~60 seconds')">copy</button>
+    </div>
+    <div class="cscroll"><pre>
+<div class="cl"><span class="ln">1</span><span class="lc"><span class="cm"># Make your changes locally, then:</span></span></div>
+<div class="cl"><span class="ln">2</span><span class="lc"><span class="f">git</span> <span class="k">add</span> <span class="w">.</span></span></div>
+<div class="cl"><span class="ln">3</span><span class="lc"><span class="f">git</span> <span class="k">commit</span> <span class="s">-m</span> <span class="s">"describe what changed"</span></span></div>
+<div class="cl"><span class="ln">4</span><span class="lc"><span class="f">git</span> <span class="k">push</span></span></div>
+<div class="cl"><span class="ln">5</span><span class="lc"><span class="cm"># Live site updates in ~60 seconds. That's it.</span></span></div>
+    </pre></div>
+  </div>
+
   <div class="callout">
-    <p><strong>Your README is your storefront.</strong> Every repo should have a README that explains what the project does, how to run it, and what you learned building it. GitHub renders it as the first thing visitors see. Write it like you're pitching the project to someone who's never heard of it — because you are.</p>
+    <p><strong>Your README is your storefront.</strong> Every repo should have a live demo link at the top, a one-sentence description, and what you learned building it. GitHub renders it as the first thing anyone sees when they visit your repo. Write it like you're pitching to someone who's never heard of the project — because you are.</p>
   </div>
 
   <div class="cblock">
     <div class="cblock-head">
       <div class="cdots"><span style="background:#FF5F57"></span><span style="background:#FEBC2E"></span><span style="background:#28C840"></span></div>
       <div class="cfile">README.md — template</div>
-      <button class="ccopy" onclick="cp(this,'# Project Name\n\nOne sentence: what does this do?\n\n## Live Demo\n[Try it here](https://yourusername.github.io/project-name)\n\n## What I Built\nShort description of what the project is and why you built it.\n\n## What I Learned\n- Technical skill or concept\n- Problem you solved\n- Approach you tried that didn\'t work and what you did instead\n\n## Stack\n- HTML / CSS / JavaScript\n- Any libraries or APIs used\n\n## Run Locally\n```bash\ngit clone https://github.com/yourusername/project-name\nopen index.html\n```')">copy</button>
+      <button class="ccopy" onclick="cp(this,'# Project Name\n\nOne sentence: what does this do?\n\n## Live Demo\n[Try it here](https://yourusername.github.io/repo-name/)\n\n## What I Built\nShort description and why you built it.\n\n## What I Learned\n- Technical skill or concept\n- Problem you solved\n- What didn\'t work and what you did instead\n\n## Stack\n- HTML / CSS / JavaScript\n- Any libraries or APIs used')">copy</button>
     </div>
     <div class="cscroll"><pre>
 <div class="cl"><span class="ln">1</span><span class="lc"><span class="gt"># Project Name</span></span></div>
@@ -823,7 +917,7 @@ pre{margin:0;line-height:1.75;}
 <div class="cl"><span class="ln">3</span><span class="lc"><span class="w">One sentence: what does this do?</span></span></div>
 <div class="cl"><span class="ln">4</span><span class="lc"></span></div>
 <div class="cl"><span class="ln">5</span><span class="lc"><span class="gt">## Live Demo</span></span></div>
-<div class="cl"><span class="ln">6</span><span class="lc"><span class="s">[Try it here]</span><span class="w">(https://yourusername.github.io/project-name)</span></span></div>
+<div class="cl"><span class="ln">6</span><span class="lc"><span class="s">[Try it here]</span><span class="w">(https://yourusername.github.io/repo-name/)</span></span></div>
 <div class="cl"><span class="ln">7</span><span class="lc"></span></div>
 <div class="cl"><span class="ln">8</span><span class="lc"><span class="gt">## What I Built</span></span></div>
 <div class="cl"><span class="ln">9</span><span class="lc"><span class="w">Short description and why you built it.</span></span></div>
@@ -841,7 +935,138 @@ pre{margin:0;line-height:1.75;}
 </div>
 
 <!-- ══════════════════════════════════
-     SECTION 7 — BUILD IN PUBLIC
+     SECTION 7 — TROUBLESHOOTING
+══════════════════════════════════ -->
+<div class="sec" id="sec-trouble">
+  <div class="phase-wrap"><div class="phase-tag">// SECTION 07</div><div class="phase-line"></div></div>
+  <h2>When things break.<br><span class="hl">Every error, explained.</span></h2>
+
+  <p>These are the exact errors you will hit. Not hypothetical ones — the real ones that stop people cold. Each one has one cause and one fix.</p>
+
+  <div class="workflow">
+    <div class="wf-head">// ERRORS IN THE ORDER YOU'LL ENCOUNTER THEM</div>
+
+    <div class="wf-step" onclick="toggleWf(this)">
+      <div class="wf-num" style="color:var(--r)">!</div>
+      <div class="wf-content">
+        <div class="wf-top"><div class="wf-title">Authentication failed / password rejected in terminal</div><div class="wf-arr">›</div></div>
+        <div class="wf-body">
+          <p><strong>What happened:</strong> GitHub removed password authentication from the terminal in 2021. Your account password works on the website only. The terminal is a different authentication system entirely.</p>
+          <p><strong>Fix:</strong> Set up SSH keys (Section 3) or use a Personal Access Token. For PAT: GitHub → Settings → Developer settings → Personal access tokens → Tokens (classic) → Generate new token → check <code>repo</code> → copy the token → paste it where the terminal asks for a password.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="wf-step" onclick="toggleWf(this)">
+      <div class="wf-num" style="color:var(--r)">!</div>
+      <div class="wf-content">
+        <div class="wf-top"><div class="wf-title">SSH key invalid — must supply OpenSSH public key format</div><div class="wf-arr">›</div></div>
+        <div class="wf-body">
+          <p><strong>What happened:</strong> You copied the key fingerprint (<code>SHA256:...</code>) instead of the actual public key. The fingerprint is printed when the key is generated as a confirmation — it is not the key itself.</p>
+          <p><strong>Fix:</strong> Run <code>cat ~/.ssh/id_ed25519.pub</code> and copy the output. It must start with <code>ssh-ed25519</code> not <code>SHA256</code>. On Mac, use <code>cat ~/.ssh/id_ed25519.pub | pbcopy</code> to copy cleanly to clipboard.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="wf-step" onclick="toggleWf(this)">
+      <div class="wf-num" style="color:var(--r)">!</div>
+      <div class="wf-content">
+        <div class="wf-top"><div class="wf-title">fatal: Updating an unborn branch with changes added to the index</div><div class="wf-arr">›</div></div>
+        <div class="wf-body">
+          <p><strong>What happened:</strong> You ran <code>git push</code> before making your first commit. Git has nothing to push yet — the branch doesn't exist until the first commit creates it.</p>
+          <p><strong>Fix:</strong></p>
+          <div class="wf-cmd">git add .</div>
+          <div class="wf-cmd" style="margin-top:6px">git commit -m "initial commit"</div>
+          <div class="wf-cmd" style="margin-top:6px">git push -u origin main</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="wf-step" onclick="toggleWf(this)">
+      <div class="wf-num" style="color:var(--r)">!</div>
+      <div class="wf-content">
+        <div class="wf-top"><div class="wf-title">error: failed to push some refs</div><div class="wf-arr">›</div></div>
+        <div class="wf-body">
+          <p><strong>What happened:</strong> GitHub has commits your local machine doesn't have — usually because GitHub auto-created a README or .gitignore when you created the repo. Your histories have diverged.</p>
+          <p><strong>Fix:</strong></p>
+          <div class="wf-cmd">git pull origin main --rebase</div>
+          <div class="wf-cmd" style="margin-top:6px">git push</div>
+          <p style="margin-top:10px">If that returns "refusing to merge unrelated histories":</p>
+          <div class="wf-cmd">git pull origin main --allow-unrelated-histories</div>
+          <div class="wf-cmd" style="margin-top:6px">git push</div>
+          <p style="margin-top:10px"><strong>Prevention:</strong> When creating a repo on GitHub, leave all checkboxes unchecked — no README, no .gitignore, no license. Start completely empty.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="wf-step" onclick="toggleWf(this)">
+      <div class="wf-num" style="color:var(--r)">!</div>
+      <div class="wf-content">
+        <div class="wf-top"><div class="wf-title">error: remote origin already exists</div><div class="wf-arr">›</div></div>
+        <div class="wf-body">
+          <p><strong>What happened:</strong> You ran <code>git remote add origin</code> twice. The remote is already set — you can't add it again.</p>
+          <p><strong>Fix:</strong> Skip the <code>git remote add</code> line and run:</p>
+          <div class="wf-cmd">git branch -M main</div>
+          <div class="wf-cmd" style="margin-top:6px">git push -u origin main</div>
+          <p style="margin-top:10px">To check what remote is currently set: <code>git remote -v</code></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="wf-step" onclick="toggleWf(this)">
+      <div class="wf-num" style="color:var(--r)">!</div>
+      <div class="wf-content">
+        <div class="wf-top"><div class="wf-title">GitHub Pages shows README instead of my site</div><div class="wf-arr">›</div></div>
+        <div class="wf-body">
+          <p><strong>What happened:</strong> One of three things — your file isn't named <code>index.html</code>, the rename didn't push to GitHub, or Pages hasn't finished deploying yet.</p>
+          <p><strong>Fix — check in this order:</strong></p>
+          <p>1. Go to <code>github.com/yourusername/your-repo</code> and look at the file list. Do you see <code>index.html</code>? If not — it didn't push. Run <code>git push</code> again.</p>
+          <p>2. If <code>index.html</code> is there but the site still shows README — wait 60 more seconds and hard refresh: <code>Cmd+Shift+R</code> on Mac.</p>
+          <p>3. If it still shows README — go to Settings → Pages and confirm it's set to deploy from <code>main</code> branch, <code>/ (root)</code> folder.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="wf-step" onclick="toggleWf(this)">
+      <div class="wf-num" style="color:var(--r)">!</div>
+      <div class="wf-content">
+        <div class="wf-top"><div class="wf-title">GitHub Pages Save button is greyed out</div><div class="wf-arr">›</div></div>
+        <div class="wf-body">
+          <p><strong>What happened:</strong> GitHub's Pages UI sometimes gets into a state where Save stays disabled even when the correct options are selected. It's a UI quirk, not an error in your configuration.</p>
+          <p><strong>Fix:</strong> Change Branch dropdown to <strong>None</strong> → click Save → change back to <strong>main</strong> → set folder to <strong>/ (root)</strong> → click Save. Resetting to None and back unsticks it.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="wf-step" onclick="toggleWf(this)">
+      <div class="wf-num" style="color:var(--r)">!</div>
+      <div class="wf-content">
+        <div class="wf-top"><div class="wf-title">404 error on GitHub Pages URL</div><div class="wf-arr">›</div></div>
+        <div class="wf-body">
+          <p><strong>What happened:</strong> Either Pages isn't enabled yet, the file isn't named <code>index.html</code>, or the URL has a typo.</p>
+          <p><strong>Fix — verify all three:</strong></p>
+          <p>1. Settings → Pages — confirm it shows a green "Your site is live at..." banner</p>
+          <p>2. Confirm <code>index.html</code> exists in your repo on github.com</p>
+          <p>3. Your URL format is: <code>https://USERNAME.github.io/REPO-NAME/</code> — username and repo name are case sensitive, must match exactly</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="wf-step" onclick="toggleWf(this)">
+      <div class="wf-num" style="color:var(--r)">!</div>
+      <div class="wf-content">
+        <div class="wf-top"><div class="wf-title">Interactive elements don't work when opening file locally on iPhone</div><div class="wf-arr">›</div></div>
+        <div class="wf-body">
+          <p><strong>What happened:</strong> iOS Safari blocks JavaScript on local files opened from storage (<code>file://</code> protocol) as a security measure. The layout renders but interactivity is disabled.</p>
+          <p><strong>Fix:</strong> This is exactly what GitHub Pages solves. Host the file there and share the <code>github.io</code> URL instead of the file itself. The URL runs on <code>https://</code> which iOS Safari trusts fully.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     SECTION 8 — BUILD IN PUBLIC
 ══════════════════════════════════ -->
 <div class="sec" id="sec-habits">
   <div class="phase-wrap"><div class="phase-tag">// SECTION 07</div><div class="phase-line"></div></div>
@@ -956,7 +1181,7 @@ function answer(el,result,quizId){
 }
 
 // ── PROGRESS ──────────────────────────────────────────────────────────────
-const SECS=['sec-mental','sec-concepts','sec-setup','sec-workflow','sec-branches','sec-pages','sec-habits'];
+const SECS=['sec-mental','sec-concepts','sec-setup','sec-workflow','sec-branches','sec-pages','sec-trouble','sec-habits'];
 let completedSecs=new Set();
 
 const obs=new IntersectionObserver(entries=>{
