@@ -7,7 +7,7 @@ An interactive guide for developers who are ready to work like professionals. Ta
 
 ## Live Demo
 
-**[Open the guide →](https://github.com/stephanie-jones78.github.io/index)**
+**[Open the guide →]([https://github.com/stephanie-jones78.github.io/index)](https://stephanie-jones78.github.io/GitHub_guide/)**
 
 *(Update this link with your username after you deploy)*
 
