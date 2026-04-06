@@ -102,7 +102,7 @@ pre{margin:0;line-height:1.75;}
 /* ── CONCEPT CARDS ── */
 .concept-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:22px 0;}
 @media(max-width:500px){.concept-grid{grid-template-columns:1fr;}}
-.concept-card{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:18px;cursor:pointer;transition:all .2s;user-select:none;}
+.concept-card{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:18px;cursor:pointer;transition:all .2s;user-select:none;overflow:visible;}
 .concept-card:hover{border-color:#444d56;}
 .concept-card.open{border-color:var(--git);background:rgba(240,136,62,.04);}
 .cc-icon{font-size:20px;margin-bottom:8px;}
@@ -110,7 +110,7 @@ pre{margin:0;line-height:1.75;}
 .concept-card.open .cc-label{color:var(--git);}
 .cc-title{font-size:14px;font-weight:700;color:var(--bright);}
 .cc-body{font-size:13px;color:var(--txt);line-height:1.75;max-height:0;overflow:hidden;transition:max-height .4s ease,margin .3s;}
-.concept-card.open .cc-body{max-height:220px;margin-top:10px;}
+.concept-card.open .cc-body{max-height:none;margin-top:10px;overflow:visible;}
 .cc-hint{font-size:9px;color:var(--border);margin-top:8px;letter-spacing:1px;}
 .concept-card.open .cc-hint{display:none;}
 
@@ -141,7 +141,7 @@ pre{margin:0;line-height:1.75;}
 .wf-arr{font-size:13px;color:var(--dim);transition:transform .25s;}
 .wf-step.open .wf-arr{transform:rotate(90deg);color:var(--git);}
 .wf-body{font-size:13px;color:var(--txt);line-height:1.75;max-height:0;overflow:hidden;transition:max-height .4s ease,margin .3s;}
-.wf-step.open .wf-body{max-height:200px;margin-top:10px;}
+.wf-step.open .wf-body{max-height:none;margin-top:10px;overflow:visible;}
 .wf-body code{font-size:11px;}
 .wf-cmd{display:inline-block;background:var(--bg);border:1px solid var(--git);color:var(--git);padding:2px 10px;border-radius:4px;font-size:12px;margin-top:6px;font-family:'Courier New',monospace;}
 
@@ -258,6 +258,7 @@ pre{margin:0;line-height:1.75;}
     <div class="nav-item active" onclick="jump('sec-mental')"><div class="nav-check" id="nc-0"></div>The Mental Model</div>
     <div class="nav-item" onclick="jump('sec-concepts')"><div class="nav-check" id="nc-1"></div>Core Concepts</div>
     <div class="nav-item" onclick="jump('sec-setup')"><div class="nav-check" id="nc-2"></div>Setup</div>
+    <div class="nav-item" onclick="jump('sec-repo')"><div class="nav-check" id="nc-2b"></div>Creating a Repo</div>
     <div class="nav-item" onclick="jump('sec-workflow')"><div class="nav-check" id="nc-3"></div>The Daily Workflow</div>
     <div class="nav-item" onclick="jump('sec-branches')"><div class="nav-check" id="nc-4"></div>Branches</div>
     <div class="nav-item" onclick="jump('sec-pages')"><div class="nav-check" id="nc-5"></div>Publish Live</div>
@@ -277,6 +278,7 @@ pre{margin:0;line-height:1.75;}
   <div class="tab on" onclick="jump('sec-mental')"><div class="tab-dot"></div>mental_model</div>
   <div class="tab" onclick="jump('sec-concepts')"><div class="tab-dot"></div>concepts</div>
   <div class="tab" onclick="jump('sec-setup')"><div class="tab-dot"></div>setup</div>
+  <div class="tab" onclick="jump('sec-repo')"><div class="tab-dot"></div>create_repo</div>
   <div class="tab" onclick="jump('sec-workflow')"><div class="tab-dot"></div>workflow</div>
   <div class="tab" onclick="jump('sec-branches')"><div class="tab-dot"></div>branches</div>
   <div class="tab" onclick="jump('sec-pages')"><div class="tab-dot"></div>publish</div>
@@ -436,7 +438,7 @@ pre{margin:0;line-height:1.75;}
         <div class="wf-top"><div class="wf-title">Create your GitHub account</div><div class="wf-arr">›</div></div>
         <div class="wf-body">
           <p>Go to <code>github.com</code>. Your username becomes part of your public URL — <code>github.com/yourname</code> — so choose something professional. Your name, a clean handle. You can't easily change it later without breaking existing links.</p>
-          <p>Use your real email. Verify it. That's all you do on the website for now.</p>
+          <p>Use your real email. Verify it.</p>
           <div class="wf-cmd">→ github.com/signup</div>
         </div>
       </div>
@@ -444,6 +446,25 @@ pre{margin:0;line-height:1.75;}
 
     <div class="wf-step" onclick="toggleWf(this)">
       <div class="wf-num" style="color:var(--git)">02</div>
+      <div class="wf-content">
+        <div class="wf-top"><div class="wf-title">Enable two-factor authentication (2FA / MFA)</div><div class="wf-arr">›</div></div>
+        <div class="wf-body">
+          <p><strong>Why this matters:</strong> Your GitHub profile is your public proof of work — every project you've ever built lives there. If someone gets into your account, they can delete repos, push malicious code, or impersonate you to collaborators. GitHub now requires 2FA for all accounts. Set it up correctly from the start.</p>
+          <p><strong>What 2FA does:</strong> Adds a second verification step when you sign in. Even if someone has your password, they still can't log in without the second factor. Your password is something you know. Your second factor is something you have — your phone.</p>
+          <p><strong>How to enable it:</strong></p>
+          <p>Profile photo → <strong>Settings</strong> → <strong>Password and authentication</strong> → <strong>Two-factor authentication</strong> → <strong>Enable two-factor authentication</strong></p>
+          <p>You'll be given three options:</p>
+          <p><code>Authenticator app</code> — <strong>recommended.</strong> Download Google Authenticator or Authy on your phone. Scan the QR code. From then on, when you log in you open the app and enter the 6-digit code it shows. The code rotates every 30 seconds and only works once.</p>
+          <p><code>SMS / text message</code> — acceptable but less secure. A code is texted to your phone number each time you log in. Vulnerable to SIM-swapping attacks. Use the authenticator app if you can.</p>
+          <p><code>Security key</code> — most secure, requires a physical hardware key (YubiKey). Overkill for now but worth knowing exists.</p>
+          <p><strong>Save your recovery codes.</strong> GitHub gives you a set of one-time backup codes when you enable 2FA. Download them and store them somewhere safe — a password manager, a secure note, printed and locked away. If you lose your phone and don't have these codes, you will be locked out of your account permanently.</p>
+          <div class="wf-cmd">→ github.com/settings/security</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="wf-step" onclick="toggleWf(this)">
+      <div class="wf-num" style="color:var(--git)">03</div>
       <div class="wf-content">
         <div class="wf-top"><div class="wf-title">Install Git on your machine</div><div class="wf-arr">›</div></div>
         <div class="wf-body">
@@ -456,7 +477,7 @@ pre{margin:0;line-height:1.75;}
     </div>
 
     <div class="wf-step" onclick="toggleWf(this)">
-      <div class="wf-num" style="color:var(--git)">03</div>
+      <div class="wf-num" style="color:var(--git)">04</div>
       <div class="wf-content">
         <div class="wf-top"><div class="wf-title">Tell Git who you are</div><div class="wf-arr">›</div></div>
         <div class="wf-body">
@@ -469,7 +490,7 @@ pre{margin:0;line-height:1.75;}
     </div>
 
     <div class="wf-step" onclick="toggleWf(this)">
-      <div class="wf-num" style="color:var(--git)">04</div>
+      <div class="wf-num" style="color:var(--git)">05</div>
       <div class="wf-content">
         <div class="wf-top"><div class="wf-title">Set up SSH — your secure handshake with GitHub</div><div class="wf-arr">›</div></div>
         <div class="wf-body">
@@ -485,7 +506,7 @@ pre{margin:0;line-height:1.75;}
     </div>
 
     <div class="wf-step" onclick="toggleWf(this)">
-      <div class="wf-num" style="color:var(--git)">05</div>
+      <div class="wf-num" style="color:var(--git)">06</div>
       <div class="wf-content">
         <div class="wf-top"><div class="wf-title">Add your public key to GitHub</div><div class="wf-arr">›</div></div>
         <div class="wf-body">
@@ -547,6 +568,198 @@ pre{margin:0;line-height:1.75;}
 <!-- ══════════════════════════════════
      SECTION 4 — DAILY WORKFLOW
 ══════════════════════════════════ -->
+<!-- ══════════════════════════════════
+     SECTION 3b — CREATING A REPO
+══════════════════════════════════ -->
+<div class="sec" id="sec-repo">
+  <div class="phase-wrap"><div class="phase-tag">// SECTION 03b</div><div class="phase-line"></div></div>
+  <h2>Creating your repo.<br><span class="hl">Two paths. Pick one.</span></h2>
+
+  <p>Git and GitHub are separate systems. <code>git init</code> creates a local repo on your machine. That's not the same as having a repo on GitHub. To get your code onto GitHub you need to either create the repo on the website first, or use the GitHub CLI to do it entirely from the terminal.</p>
+
+  <div class="concept-grid">
+    <div class="concept-card open" style="border-color:var(--git);background:rgba(240,136,62,.04);cursor:default">
+      <div class="cc-icon">🌐</div>
+      <div class="cc-label" style="color:var(--git)">PATH A — BROWSER FIRST</div>
+      <div class="cc-title">Create on GitHub, then connect locally</div>
+      <div class="cc-body" style="max-height:none;margin-top:10px">Create the empty repo on github.com, copy the SSH URL, then connect your local folder to it. Most common approach. Good for understanding what's happening. Takes about 2 minutes.</div>
+    </div>
+    <div class="concept-card open" style="border-color:var(--b);background:rgba(56,189,248,.04);cursor:default">
+      <div class="cc-icon">⚡</div>
+      <div class="cc-label" style="color:var(--b)">PATH B — TERMINAL ONLY</div>
+      <div class="cc-title">GitHub CLI — never leave the terminal</div>
+      <div class="cc-body" style="max-height:none;margin-top:10px">Install the GitHub CLI (<code>gh</code>) once, authenticate once, then create repos with a single command. No browser, no copying URLs, no switching windows. The professional workflow once you're comfortable with the basics.</div>
+    </div>
+  </div>
+
+  <h3>Path A — Create on GitHub first, then connect</h3>
+  <p>Use this path when you're starting out or when you want a visual confirmation that the repo exists before connecting to it.</p>
+
+  <div class="pages-steps">
+    <div class="ps-item">
+      <div class="ps-num" style="color:var(--git)">01</div>
+      <div class="ps-content">
+        <div class="ps-title">Create the repo on github.com</div>
+        <div class="ps-body">
+          Go to <code>github.com</code> → click the <strong>+</strong> in the top right → <strong>New repository</strong><br><br>
+          Fill in:
+          <ul style="margin:8px 0 8px 20px;color:var(--txt);font-size:13px;line-height:1.9">
+            <li><strong>Repository name</strong> — use lowercase with hyphens, no spaces: <code>my-project</code> not <code>My Project</code></li>
+            <li><strong>Description</strong> — one sentence, optional but good habit</li>
+            <li><strong>Public or Private</strong> — Public if you want it in your portfolio, Private for work in progress</li>
+            <li><strong>Initialize options — leave all boxes unchecked.</strong> No README, no .gitignore, no license. You're bringing your own files. Any file GitHub creates here will conflict with your local history when you try to push.</li>
+          </ul>
+          Click <strong>Create repository</strong>.
+        </div>
+      </div>
+    </div>
+    <div class="ps-item">
+      <div class="ps-num" style="color:var(--git)">02</div>
+      <div class="ps-content">
+        <div class="ps-title">Copy the SSH URL — not the HTTPS URL</div>
+        <div class="ps-body">
+          GitHub shows you the repo URL immediately after creation. Make sure you copy the <strong>SSH</strong> version, not HTTPS.<br><br>
+          Click the <strong>SSH</strong> tab on the Quick Setup screen. The URL looks like:<br>
+          <code>git@github.com:yourusername/my-project.git</code><br><br>
+          Not like:<br>
+          <code>https://github.com/yourusername/my-project.git</code><br><br>
+          <strong>Why SSH not HTTPS:</strong> You set up SSH keys in Section 3. Using the SSH URL means the terminal authenticates silently using your key. HTTPS would prompt for credentials every time — and since GitHub removed password auth, you'd need a Personal Access Token. SSH is cleaner. Use SSH.
+        </div>
+      </div>
+    </div>
+    <div class="ps-item">
+      <div class="ps-num" style="color:var(--git)">03</div>
+      <div class="ps-content">
+        <div class="ps-title">Initialize locally and connect</div>
+        <div class="ps-body">In your terminal, navigate to your project folder and run the full sequence:</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cblock">
+    <div class="cblock-head">
+      <div class="cdots"><span style="background:#FF5F57"></span><span style="background:#FEBC2E"></span><span style="background:#28C840"></span></div>
+      <div class="cfile">terminal — Path A: full sequence</div>
+      <button class="ccopy" onclick="cp(this,'# Navigate to your project folder\ncd path/to/your-project\n\n# Initialize local Git repo\ngit init\n\n# Stage all your files\ngit add .\n\n# Make your first commit\ngit commit -m \"initial commit\"\n\n# Connect to the GitHub repo you just created\n# Paste YOUR SSH URL from GitHub here\ngit remote add origin git@github.com:yourusername/my-project.git\n\n# Rename branch to main (matches GitHub default)\ngit branch -M main\n\n# Push — -u sets upstream so future pushes just need: git push\ngit push -u origin main')">copy</button>
+    </div>
+    <div class="cscroll"><pre>
+<div class="cl"><span class="ln">1</span><span class="lc"><span class="cm"># Navigate to your project folder</span></span></div>
+<div class="cl"><span class="ln">2</span><span class="lc"><span class="f">cd</span> <span class="w">path/to/your-project</span></span></div>
+<div class="cl"><span class="ln">3</span><span class="lc"></span></div>
+<div class="cl"><span class="ln">4</span><span class="lc"><span class="cm"># Initialize local Git repo</span></span></div>
+<div class="cl"><span class="ln">5</span><span class="lc"><span class="f">git</span> <span class="k">init</span></span></div>
+<div class="cl"><span class="ln">6</span><span class="lc"></span></div>
+<div class="cl"><span class="ln">7</span><span class="lc"><span class="cm"># Stage all your files</span></span></div>
+<div class="cl"><span class="ln">8</span><span class="lc"><span class="f">git</span> <span class="k">add</span> <span class="w">.</span></span></div>
+<div class="cl"><span class="ln">9</span><span class="lc"></span></div>
+<div class="cl"><span class="ln">10</span><span class="lc"><span class="cm"># First commit</span></span></div>
+<div class="cl"><span class="ln">11</span><span class="lc"><span class="f">git</span> <span class="k">commit</span> <span class="s">-m</span> <span class="s">"initial commit"</span></span></div>
+<div class="cl"><span class="ln">12</span><span class="lc"></span></div>
+<div class="cl"><span class="ln">13</span><span class="lc"><span class="cm"># Connect to GitHub — paste YOUR SSH URL</span></span></div>
+<div class="cl"><span class="ln">14</span><span class="lc"><span class="f">git</span> <span class="k">remote add</span> <span class="w">origin</span> <span class="s">git@github.com:yourusername/my-project.git</span></span></div>
+<div class="cl"><span class="ln">15</span><span class="lc"></span></div>
+<div class="cl"><span class="ln">16</span><span class="lc"><span class="cm"># Set branch name to main</span></span></div>
+<div class="cl"><span class="ln">17</span><span class="lc"><span class="f">git</span> <span class="k">branch</span> <span class="s">-M</span> <span class="w">main</span></span></div>
+<div class="cl"><span class="ln">18</span><span class="lc"></span></div>
+<div class="cl"><span class="ln">19</span><span class="lc"><span class="cm"># Push (-u sets upstream — future pushes just need: git push)</span></span></div>
+<div class="cl"><span class="ln">20</span><span class="lc"><span class="f">git</span> <span class="k">push</span> <span class="s">-u</span> <span class="w">origin main</span></span></div>
+<div class="cl"><span class="ln">21</span><span class="lc"></span></div>
+<div class="cl"><span class="ln">22</span><span class="lc"><span class="cm"># Verify: go to github.com/yourusername/my-project</span></span></div>
+<div class="cl"><span class="ln">23</span><span class="lc"><span class="cm"># You should see your files listed there</span></span></div>
+    </pre></div>
+  </div>
+
+  <div class="callout red">
+    <p><strong>Most common mistake on Path A:</strong> checking "Add a README" or "Add .gitignore" when creating the repo on GitHub. This creates a commit on GitHub before you push anything. When you try to push your local commits, Git sees two different histories and throws an error. Always create the repo completely empty.</p>
+  </div>
+
+  <h3>Path B — GitHub CLI: full terminal workflow</h3>
+  <p>The GitHub CLI (<code>gh</code>) is an official tool from GitHub that lets you do everything — create repos, open pull requests, manage issues — without ever opening a browser. Install it once and every future project starts with a single command.</p>
+
+  <div class="pages-steps">
+    <div class="ps-item">
+      <div class="ps-num" style="color:var(--b)">01</div>
+      <div class="ps-content">
+        <div class="ps-title">Install the GitHub CLI</div>
+        <div class="ps-body">
+          <strong>Mac:</strong> If you have Homebrew installed: <code>brew install gh</code><br>
+          If you don't have Homebrew: install it first with the command at <code>brew.sh</code>, then run <code>brew install gh</code><br><br>
+          <strong>Windows:</strong> <code>winget install --id GitHub.cli</code> or download the installer from <code>cli.github.com</code>
+        </div>
+      </div>
+    </div>
+    <div class="ps-item">
+      <div class="ps-num" style="color:var(--b)">02</div>
+      <div class="ps-content">
+        <div class="ps-title">Authenticate once</div>
+        <div class="ps-body">
+          Run <code>gh auth login</code> and follow the prompts. Choose <strong>GitHub.com</strong>, then <strong>SSH</strong>, then <strong>Login with a web browser</strong>. It opens a browser tab, you authorize, done. You never have to do this again on this machine.
+        </div>
+      </div>
+    </div>
+    <div class="ps-item">
+      <div class="ps-num" style="color:var(--b)">03</div>
+      <div class="ps-content">
+        <div class="ps-title">Create and push — one sequence, no browser</div>
+        <div class="ps-body">From inside your project folder, run the full sequence below. The <code>gh repo create</code> command creates the repo on GitHub and connects your local folder to it in one step.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cblock">
+    <div class="cblock-head">
+      <div class="cdots"><span style="background:#FF5F57"></span><span style="background:#FEBC2E"></span><span style="background:#28C840"></span></div>
+      <div class="cfile">terminal — Path B: GitHub CLI full sequence</div>
+      <button class="ccopy" onclick="cp(this,'# Install gh (Mac with Homebrew)\nbrew install gh\n\n# Authenticate — do this once\ngh auth login\n# Choose: GitHub.com → SSH → Login with web browser\n\n# ────────────────────────────────────────\n# For each new project:\n# ────────────────────────────────────────\n\n# Navigate to your project folder\ncd path/to/your-project\n\n# Initialize, stage, commit\ngit init\ngit add .\ngit commit -m \"initial commit\"\n\n# Create GitHub repo AND connect it — one command\n# --public makes it visible on your profile\n# --source=. uses current folder\n# --remote=origin names the connection \"origin\"\n# --push pushes immediately\ngh repo create my-project --public --source=. --remote=origin --push\n\n# Done. Your repo is live on GitHub.')">copy</button>
+    </div>
+    <div class="cscroll"><pre>
+<div class="cl"><span class="ln">1</span><span class="lc"><span class="cm"># Install gh (Mac with Homebrew)</span></span></div>
+<div class="cl"><span class="ln">2</span><span class="lc"><span class="f">brew</span> <span class="k">install</span> <span class="w">gh</span></span></div>
+<div class="cl"><span class="ln">3</span><span class="lc"></span></div>
+<div class="cl"><span class="ln">4</span><span class="lc"><span class="cm"># Authenticate once</span></span></div>
+<div class="cl"><span class="ln">5</span><span class="lc"><span class="f">gh</span> <span class="k">auth login</span></span></div>
+<div class="cl"><span class="ln">6</span><span class="lc"><span class="cm"># → GitHub.com → SSH → Login with web browser</span></span></div>
+<div class="cl"><span class="ln">7</span><span class="lc"></span></div>
+<div class="cl"><span class="ln">8</span><span class="lc"><span class="cm"># ── For each new project: ──────────────────</span></span></div>
+<div class="cl"><span class="ln">9</span><span class="lc"><span class="f">cd</span> <span class="w">path/to/your-project</span></span></div>
+<div class="cl"><span class="ln">10</span><span class="lc"><span class="f">git</span> <span class="k">init</span></span></div>
+<div class="cl"><span class="ln">11</span><span class="lc"><span class="f">git</span> <span class="k">add</span> <span class="w">.</span></span></div>
+<div class="cl"><span class="ln">12</span><span class="lc"><span class="f">git</span> <span class="k">commit</span> <span class="s">-m</span> <span class="s">"initial commit"</span></span></div>
+<div class="cl"><span class="ln">13</span><span class="lc"></span></div>
+<div class="cl"><span class="ln">14</span><span class="lc"><span class="cm"># Create repo on GitHub + connect + push — one command</span></span></div>
+<div class="cl"><span class="ln">15</span><span class="lc"><span class="f">gh</span> <span class="k">repo create</span> <span class="w">my-project</span> <span class="s">--public</span> <span class="s">--source=.</span> <span class="s">--remote=origin</span> <span class="s">--push</span></span></div>
+<div class="cl"><span class="ln">16</span><span class="lc"></span></div>
+<div class="cl"><span class="ln">17</span><span class="lc"><span class="cm"># Done. Repo is live at github.com/yourusername/my-project</span></span></div>
+    </pre></div>
+  </div>
+
+  <div class="callout blue">
+    <p><strong>Which path should you use?</strong> Start with Path A to understand the connection between local and remote. Switch to Path B once you've done it a few times and want to move faster. Path B is what most professional developers use daily — but Path A teaches you what Path B is doing under the hood.</p>
+  </div>
+
+  <h3>Verify your repo is connected correctly</h3>
+  <p>After either path, run this to confirm your local repo is pointing to the right place on GitHub:</p>
+
+  <div class="cblock">
+    <div class="cblock-head">
+      <div class="cdots"><span style="background:#FF5F57"></span><span style="background:#FEBC2E"></span><span style="background:#28C840"></span></div>
+      <div class="cfile">terminal — verify remote connection</div>
+      <button class="ccopy" onclick="cp(this,'# Check what remote your repo is connected to\ngit remote -v\n\n# Should show two lines like:\n# origin  git@github.com:yourusername/my-project.git (fetch)\n# origin  git@github.com:yourusername/my-project.git (push)\n\n# If it shows https:// instead of git@ — switch to SSH:\ngit remote set-url origin git@github.com:yourusername/my-project.git')">copy</button>
+    </div>
+    <div class="cscroll"><pre>
+<div class="cl"><span class="ln">1</span><span class="lc"><span class="cm"># Check what remote your repo is connected to</span></span></div>
+<div class="cl"><span class="ln">2</span><span class="lc"><span class="f">git</span> <span class="k">remote</span> <span class="s">-v</span></span></div>
+<div class="cl"><span class="ln">3</span><span class="lc"></span></div>
+<div class="cl"><span class="ln">4</span><span class="lc"><span class="cm"># Should show SSH URLs like:</span></span></div>
+<div class="cl"><span class="ln">5</span><span class="lc"><span class="w">origin  </span><span class="s">git@github.com:yourusername/my-project.git</span> <span class="w">(fetch)</span></span></div>
+<div class="cl"><span class="ln">6</span><span class="lc"><span class="w">origin  </span><span class="s">git@github.com:yourusername/my-project.git</span> <span class="w">(push)</span></span></div>
+<div class="cl"><span class="ln">7</span><span class="lc"></span></div>
+<div class="cl"><span class="ln">8</span><span class="lc"><span class="cm"># If it shows https:// — switch to SSH</span></span></div>
+<div class="cl"><span class="ln">9</span><span class="lc"><span class="f">git</span> <span class="k">remote set-url</span> <span class="w">origin</span> <span class="s">git@github.com:yourusername/my-project.git</span></span></div>
+    </pre></div>
+  </div>
+</div>
+
 <div class="sec" id="sec-workflow">
   <div class="phase-wrap"><div class="phase-tag">// SECTION 04</div><div class="phase-line"></div></div>
   <h2>The workflow.<br><span class="hl">Seven commands. That's it.</span></h2>
@@ -623,7 +836,7 @@ pre{margin:0;line-height:1.75;}
       <div class="cc-icon">✗</div>
       <div class="cc-label" style="color:var(--r)">BAD COMMITS</div>
       <div class="cc-title" style="color:var(--r)">Don't write these</div>
-      <div class="cc-body" style="max-height:200px;margin-top:10px">
+      <div class="cc-body" style="max-height:none;margin-top:10px;overflow:visible">
         <code style="display:block;margin-bottom:6px;color:var(--r)">"fix"</code>
         <code style="display:block;margin-bottom:6px;color:var(--r)">"stuff"</code>
         <code style="display:block;margin-bottom:6px;color:var(--r)">"changes"</code>
@@ -636,7 +849,7 @@ pre{margin:0;line-height:1.75;}
       <div class="cc-icon">✓</div>
       <div class="cc-label" style="color:var(--g)">GOOD COMMITS</div>
       <div class="cc-title" style="color:var(--g)">Write these instead</div>
-      <div class="cc-body" style="max-height:200px;margin-top:10px">
+      <div class="cc-body" style="max-height:none;margin-top:10px;overflow:visible">
         <code style="display:block;margin-bottom:6px;color:var(--g)">"add user login form with validation"</code>
         <code style="display:block;margin-bottom:6px;color:var(--g)">"fix score counter resetting on wrong answer"</code>
         <code style="display:block;margin-bottom:6px;color:var(--g)">"refactor API calls into separate module"</code>
@@ -771,13 +984,13 @@ pre{margin:0;line-height:1.75;}
       <div class="cc-icon">📦</div>
       <div class="cc-label">GITHUB — STORAGE</div>
       <div class="cc-title">Shows raw code</div>
-      <div class="cc-body" style="max-height:140px;margin-top:10px">When you push a file to GitHub, you can view the raw source code on github.com. An HTML file shows you the HTML. A Python file shows you the Python. GitHub does not run or render files — it stores and displays them as text.</div>
+      <div class="cc-body" style="max-height:none;margin-top:10px;overflow:visible">When you push a file to GitHub, you can view the raw source code on github.com. An HTML file shows you the HTML. A Python file shows you the Python. GitHub does not run or render files — it stores and displays them as text.</div>
     </div>
     <div class="concept-card open" style="border-color:var(--git);background:rgba(240,136,62,.04);cursor:default">
       <div class="cc-icon">🌐</div>
       <div class="cc-label">GITHUB PAGES — HOSTING</div>
       <div class="cc-title">Serves a live webpage</div>
-      <div class="cc-body" style="max-height:140px;margin-top:10px">GitHub Pages is a hosting service built on top of your repo. Enable it and GitHub takes your <code>index.html</code>, serves it as a real webpage at a public URL, and runs all your CSS and JavaScript. The same file that showed raw code on GitHub becomes a fully interactive site anyone can open on any device.</div>
+      <div class="cc-body" style="max-height:none;margin-top:10px;overflow:visible">GitHub Pages is a hosting service built on top of your repo. Enable it and GitHub takes your <code>index.html</code>, serves it as a real webpage at a public URL, and runs all your CSS and JavaScript. The same file that showed raw code on GitHub becomes a fully interactive site anyone can open on any device.</div>
     </div>
   </div>
 
@@ -791,13 +1004,13 @@ pre{margin:0;line-height:1.75;}
       <div class="cc-icon">✓</div>
       <div class="cc-label" style="color:var(--g)">WORKS ON PAGES</div>
       <div class="cc-title" style="color:var(--g)">Static files</div>
-      <div class="cc-body" style="max-height:160px;margin-top:10px">HTML, CSS, JavaScript — fully rendered and interactive. Single-page apps, tools, games, calculators, dashboards. This guide itself is a perfect example — one HTML file, full interactivity, hosted free on Pages.</div>
+      <div class="cc-body" style="max-height:none;margin-top:10px;overflow:visible">HTML, CSS, JavaScript — fully rendered and interactive. Single-page apps, tools, games, calculators, dashboards. This guide itself is a perfect example — one HTML file, full interactivity, hosted free on Pages.</div>
     </div>
     <div class="concept-card open" style="border-color:var(--r);background:rgba(255,77,109,.04);cursor:default">
       <div class="cc-icon">✗</div>
       <div class="cc-label" style="color:var(--r)">DOES NOT WORK ON PAGES</div>
       <div class="cc-title" style="color:var(--r)">Server-side code</div>
-      <div class="cc-body" style="max-height:160px;margin-top:10px">Python, Node.js, databases, server APIs. Anything that needs to execute code before responding to a user. When you hit this wall — and you will — use Vercel, Railway, or Render (all have free tiers). For now, Pages handles everything you're building.</div>
+      <div class="cc-body" style="max-height:none;margin-top:10px;overflow:visible">Python, Node.js, databases, server APIs. Anything that needs to execute code before responding to a user. When you hit this wall — and you will — use Vercel, Railway, or Render (all have free tiers). For now, Pages handles everything you're building.</div>
     </div>
   </div>
 
@@ -1181,7 +1394,7 @@ function answer(el,result,quizId){
 }
 
 // ── PROGRESS ──────────────────────────────────────────────────────────────
-const SECS=['sec-mental','sec-concepts','sec-setup','sec-workflow','sec-branches','sec-pages','sec-trouble','sec-habits'];
+const SECS=['sec-mental','sec-concepts','sec-setup','sec-repo','sec-workflow','sec-branches','sec-pages','sec-trouble','sec-habits'];
 let completedSecs=new Set();
 
 const obs=new IntersectionObserver(entries=>{
